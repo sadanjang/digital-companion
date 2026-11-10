@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f7f3">
+<title>디지털 동행 | Digital for All — AI 기능 추가 v2.4</title>
+<style>
+:root{--ink:#202a35;--muted:#687482;--green:#236b55;--green2:#e5f1eb;--cream:#f6f7f3;--line:#e3e8e2;--white:#fff;--yellow:#fff4d8}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:var(--ink);zoom:var(--ui-zoom,1)}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:480px;min-height:100vh;margin:auto;background:var(--cream);padding-bottom:88px;position:relative}
+header{padding:22px 20px 16px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.logo{width:38px;height:38px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center;font-size:20px}
+.header-actions{display:flex;gap:8px}.icon-btn{border:1px solid var(--line);background:white;border-radius:12px;width:40px;height:40px;color:var(--ink);font-size:18px}
+main{padding:0 18px}.eyebrow{font-size:12px;font-weight:800;color:var(--green);letter-spacing:1.1px}
+.hero{background:var(--green);color:white;border-radius:24px;padding:24px 22px;margin:4px 0 22px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:150px;height:150px;border:1px solid #ffffff30;border-radius:50%;right:-45px;top:-45px;box-shadow:0 0 0 22px #ffffff0d,0 0 0 45px #ffffff0a}
+.hero h1{font-size:28px;line-height:1.3;margin:10px 0 8px;letter-spacing:-1.2px;position:relative;z-index:1}
+.hero p{font-size:15px;line-height:1.6;color:#e3f0e9;margin:0;max-width:290px;position:relative;z-index:1}
+.hero .tag{display:inline-block;border:1px solid #ffffff60;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;position:relative;z-index:1}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 12px}
+.section-head h2{font-size:19px;margin:0;letter-spacing:-.5px}.section-head span{font-size:12px;color:var(--muted)}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.feature{background:white;border:1px solid var(--line);border-radius:19px;padding:17px 15px;text-align:left;min-height:145px;color:var(--ink);transition:.15s}
+.feature:active,.topic:active{transform:scale(.98)}
+.feature .emoji{font-size:27px;display:block;margin-bottom:12px}
+.feature strong{display:block;font-size:16px;margin-bottom:5px}.feature small{font-size:12px;line-height:1.5;color:var(--muted)}
+.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:17px;margin-top:13px}
+.panel h3{font-size:16px;margin:0 0 5px}.panel p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}
+.topic-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+.topic{border:1px solid var(--line);background:#fbfcfa;border-radius:13px;padding:12px;text-align:left;font-size:14px;font-weight:700;color:var(--ink)}
+.topic span{display:block;font-size:19px;margin-bottom:5px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:#ffffffed;backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 12px 18px;z-index:5}
+.nav{border:0;background:transparent;color:#78838d;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:65px}.nav b{font-size:20px;font-weight:500}.nav.active{color:var(--green);font-weight:800}
+.screen{display:none}.screen.active{display:block}
+.back{border:0;background:transparent;color:var(--green);font-weight:800;padding:10px 0;margin:0 0 8px}
+.page-title{font-size:25px;letter-spacing:-.8px;margin:5px 0 7px}.sub{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 18px}
+.chatbox{background:white;border:1px solid var(--line);border-radius:19px;padding:15px;min-height:210px;display:flex;flex-direction:column;gap:12px}
+.bubble{max-width:88%;padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.6}
+.bot{background:var(--green2);align-self:flex-start;border-bottom-left-radius:5px}.user{background:#eef0f2;align-self:flex-end;border-bottom-right-radius:5px}
+.composer{display:flex;gap:8px;margin-top:12px}.composer input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;padding:13px;background:white;font-size:14px}
+.primary{background:var(--green);color:white;border:0;border-radius:14px;padding:13px 16px;font-weight:800}
+.secondary{background:var(--green2);color:var(--green);border:1px solid #cfe2d7;border-radius:13px;padding:11px 13px;font-weight:700}
+.notice{background:var(--yellow);border-radius:13px;padding:12px 13px;font-size:12px;line-height:1.5;color:#695322;margin-top:12px}
+.upload{border:2px dashed #b8c9bf;border-radius:18px;padding:24px 16px;text-align:center;background:#fbfdfb}
+.upload input{display:none}.upload label{display:block;cursor:pointer}.upload .big{font-size:34px}.upload strong{display:block;margin:8px 0 4px}.upload small{color:var(--muted)}
+.preview{max-width:100%;max-height:220px;border-radius:12px;margin-top:12px;display:none}
+.guide-card{border:1px solid var(--line);background:white;border-radius:17px;padding:15px;margin-bottom:10px;text-align:left;width:100%;color:var(--ink)}
+.guide-card strong{display:block;font-size:15px;margin:3px 0 5px}.guide-card small{color:var(--muted);font-size:12px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}.step:last-child{border:0}
+.num{width:30px;height:30px;border-radius:50%;background:var(--green2);color:var(--green);font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.step p{margin:2px 0 0;font-size:14px;line-height:1.55}
+.access-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}
+.toggle{border:0;background:#dfe6e1;border-radius:99px;width:48px;height:28px;padding:3px;text-align:left}.toggle:after{content:"";display:block;width:22px;height:22px;background:white;border-radius:50%;transition:.15s}.toggle.on{background:var(--green)}.toggle.on:after{transform:translateX(20px)}
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#202a35;color:white;padding:11px 16px;border-radius:12px;font-size:13px;display:none;z-index:9;white-space:nowrap}
+@media(min-width:600px){body{padding:20px 0}.app{border-radius:28px;overflow:hidden;box-shadow:0 10px 50px #20352a15;min-height:850px}.bottom{bottom:20px;border-radius:0 0 28px 28px}}
+
+/* ===== 1. 추가 스타일: 필요한 부분은 이 구역에서 수정하세요 ===== */
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #deac4b;outline-offset:2px}
+.tool-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{border:1px solid #cbded3;background:#f7fbf7;border-radius:999px;padding:8px 11px;color:var(--green);font-size:12px;font-weight:800}
+.mic-btn{min-width:44px;background:white;border:1px solid var(--line);border-radius:14px;font-size:19px}
+.mic-btn.listening{background:#ffe8e3;border-color:#c15748}
+.bubble{white-space:pre-wrap;overflow-wrap:anywhere}
+.chatbox{max-height:400px;overflow-y:auto;scroll-behavior:smooth}
+.field{display:block;margin:12px 0 6px;font-size:13px;font-weight:800}
+textarea,input[type=url],.editor-input,select{background:white;border:1px solid var(--line);border-radius:12px;padding:11px;width:100%;color:var(--ink)}
+textarea{min-height:82px;resize:vertical}
+.inline-hint{color:var(--muted);font-size:12px;line-height:1.6;margin-top:8px}
+.callout{font-size:13px;line-height:1.7;border:1px solid #d9e9df;background:#f5faf6;border-radius:15px;padding:13px;margin-top:13px;white-space:pre-wrap}
+.practice-card{background:white;border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin:13px 0}
+.practice-count{font-size:13px;color:var(--green);font-weight:800;margin-bottom:10px}
+.practice-body{font-size:18px;line-height:1.8;margin-bottom:15px;white-space:pre-wrap}
+.progress-track{width:100%;height:9px;background:#e7eee9;border-radius:30px;overflow:hidden;margin:9px 0 17px}
+.progress-fill{height:100%;background:var(--green);width:0;transition:width .2s}
+.is-complete{color:var(--green);font-size:13px;font-weight:700}
+.editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.editor-actions button{flex:1}
+#imageHelpResult:empty{display:none}
+#customGuideList:empty{display:none}
+.setting-note{font-size:11px;color:var(--muted);line-height:1.7}
+.large-mode .brand{font-size:23px}
+.large-mode .page-title{font-size:30px}
+.large-mode .hero h1{font-size:32px}
+.large-mode .hero p,.large-mode .sub,.large-mode .bubble,.large-mode .step p,.large-mode .topic,.large-mode .feature small,.large-mode .feature strong,.large-mode .guide-card strong,.large-mode .guide-card small,.large-mode .notice,.large-mode .panel p,.large-mode .access-row,.large-mode .primary,.large-mode .secondary,.large-mode .composer input,.large-mode .callout{font-size:calc(1em + 3px)}
+.large-mode .nav{font-size:13px}
+.contrast-mode{--ink:#0e1711;--muted:#263d2d;--green:#06472f;--green2:#d5f7df;--cream:#ffffff;--line:#57635b;--yellow:#fff0a4}
+.contrast-mode .feature,.contrast-mode .panel,.contrast-mode .guide-card,.contrast-mode .topic,.contrast-mode .chatbox{border-width:2px}
+@media(min-width:600px){.app{overflow:visible}.bottom{bottom:20px}}
+
+/* ===== 음성 안내 컨트롤 ===== */
+.voice-guide-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.voice-guide-actions button{flex:1;min-width:125px}
+.step-voice{margin-top:8px;padding:8px 11px;border:1px solid #cfe2d7;background:#f7fbf7;color:var(--green);border-radius:11px;font-size:12px;font-weight:800}
+.practice-voice{display:flex;gap:8px;margin:10px 0 0}
+.practice-voice button{flex:1}
+.voice-status{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px;min-height:18px}
+.voice-off-note{color:#9a4b3e;font-weight:800}
+.voice-guide-actions button:disabled,.practice-voice button:disabled,.step-voice:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.35)}
+.voice-state-label{font-size:12px;font-weight:800;color:var(--green);margin:4px 0 8px}
+.large-mode .step-voice,.large-mode .voice-status{font-size:15px}
+
+
+/* ===== 체험형 학습 화면: 키오스크 / 기차표 예매 ===== */
+.simulation-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:12px 0;box-shadow:0 5px 18px #20352a0b}
+.sim-progress{font-size:12px;color:var(--green);font-weight:800;margin:0 0 10px}
+.mock-device{border:1px solid #d8ded9;border-radius:18px;overflow:hidden;background:#f7f8f6}
+.mock-top{background:#173f35;color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.mock-top small{font-size:11px;font-weight:500;color:#d7e7df}
+.mock-body{padding:15px}
+.mock-title{font-size:19px;font-weight:900;letter-spacing:-.5px;margin:2px 0 7px}
+.mock-desc{font-size:12px;color:#687482;line-height:1.55;margin:0 0 13px}
+.mock-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mock-choice{border:2px solid #dfe5df;background:#fff;border-radius:13px;padding:12px 8px;text-align:center;color:#24332c;font-weight:800;min-height:72px}
+.mock-choice.selected{border:3px solid #145b42;background:#dff2e6;color:#103f2e;box-shadow:0 0 0 3px #236b5526;position:relative}
+.mock-choice.selected:after{content:'✓ 선택됨';display:block;font-size:11px;font-weight:900;color:#145b42;margin-top:5px}
+.mock-choice:focus-visible{outline:3px solid #e2a72e;outline-offset:2px}
+.kiosk-goal{background:#fff4d8;border:2px solid #e7c66c;border-radius:13px;padding:11px 13px;margin:0 0 12px;color:#59451b;font-size:13px;line-height:1.55}
+.kiosk-goal strong{display:block;font-size:14px;margin-bottom:3px}
+.kiosk-cartbar{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#eaf3ed;border:1px solid #c9dfd1;border-radius:12px;padding:10px 12px;margin:12px 0}
+.kiosk-cartbar strong{color:#174b39}
+.kiosk-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0 13px}
+.kiosk-options .mock-choice{min-height:58px}
+.kiosk-section-label{font-size:13px;font-weight:900;margin:12px 0 6px;color:#33483b}
+.kiosk-back{width:100%;margin-top:8px}
+.kiosk-item-price{font-size:12px;color:#687482}
+.kiosk-cart-remove{border:1px solid #e2c6c2!important;color:#9a4036!important;background:#fff8f7!important;font-size:11px!important;width:auto!important;padding:5px 8px!important;height:auto!important}
+.mock-choice .mock-emoji{display:block;font-size:24px;margin-bottom:5px}
+.mock-action{width:100%;border:0;border-radius:12px;padding:13px;background:#236b55;color:white;font-weight:900;margin-top:12px}
+.mock-action:disabled{background:#b8c4bd;color:#fff}
+.mock-subaction{border:1px solid #cbded3;border-radius:11px;padding:10px 12px;background:#f7fbf7;color:#236b55;font-weight:800}
+.mock-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 0;border-bottom:1px solid #e7ebe7;font-size:13px}
+.mock-row:last-child{border-bottom:0}
+.mock-qty{display:flex;align-items:center;gap:10px;font-weight:900}
+.mock-qty button{width:30px;height:30px;border:1px solid #cbded3;border-radius:9px;background:#fff;color:#236b55;font-weight:900}
+.mock-total{display:flex;justify-content:space-between;font-size:17px;font-weight:900;padding-top:13px}
+.mock-field{width:100%;border:1px solid #d6ded8;border-radius:11px;background:#fff;padding:12px;color:#202a35;margin:5px 0 10px}
+.mock-train{background:#fff;border:1px solid #dfe5df;border-radius:13px;padding:12px;margin:9px 0}
+.mock-train-head{display:flex;justify-content:space-between;gap:8px;font-weight:900}
+.mock-train-time{display:flex;justify-content:space-between;align-items:center;margin:12px 0 5px;font-size:19px;font-weight:900}
+.mock-train small{color:#687482}
+.mock-success{text-align:center;padding:23px 10px}
+.mock-evaluation{background:#f7fbf8;border:1px solid #cfe2d7;border-radius:14px;padding:13px;margin:12px 0;text-align:left}
+.mock-evaluation h3{font-size:16px;margin:0 0 9px;color:#174b39}
+.eval-line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #e1eae4;font-size:13px}
+.eval-line:last-child{border-bottom:0}
+.eval-good{color:#176b48;font-weight:900}.eval-fix{color:#a34c37;font-weight:900}
+.eval-feedback{font-size:13px;line-height:1.65;margin:10px 0;color:#33483b}
+.mock-success .check{font-size:43px}
+.mock-hint{background:#fff4d8;border-radius:11px;padding:10px 11px;font-size:12px;line-height:1.55;color:#695322;margin-top:12px}
+
+/* v1.8: KTX 시간표, 병원 달력, 스마트폰 설정 체험 */
+.mock-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:12px 0}
+.calendar-head,.calendar-day{min-width:0;text-align:center;padding:8px 2px;border-radius:9px;font-size:12px}
+.calendar-head{font-weight:900;color:#65736b}
+.calendar-day{border:1px solid #dfe5df;background:#fff;color:#24332c;min-height:42px;font-weight:800}
+.calendar-day:disabled{background:#f0f1ef;color:#b2b9b4;border-color:#e8ebe8;cursor:not-allowed}
+.calendar-day.selected{background:#dff2e6;border:2px solid #145b42;color:#103f2e}
+.calendar-day .sold-label{display:block;font-size:8px;color:#a34c37;font-weight:900}
+.time-slot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.time-slot{border:1px solid #dfe5df;border-radius:11px;padding:12px 8px;background:#fff;font-weight:900;color:#24332c}
+.time-slot.selected{border:2px solid #145b42;background:#dff2e6;color:#103f2e}
+.time-slot:disabled{background:#f1f2f0;color:#a6ada8;text-decoration:line-through;cursor:not-allowed}
+.time-slot small{display:block;font-size:10px;margin-top:4px;text-decoration:none}
+.phone-settings{border:1px solid #d5ddd7;border-radius:20px;background:#f4f6f4;padding:12px;max-width:390px;margin:10px auto}
+.phone-status{display:flex;justify-content:space-between;font-size:10px;font-weight:800;color:#536158;padding:2px 5px 10px}
+.phone-screen{background:#fff;border-radius:14px;padding:14px;min-height:180px}
+.phone-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 8px;border-bottom:1px solid #e8ece8;background:#fff;width:100%;text-align:left;color:#24332c;font-weight:800}
+.phone-row:last-child{border-bottom:0}
+.phone-row.selected{background:#e7f3eb;color:#145b42}
+.phone-sample{border:1px solid #dce5de;background:#f8fbf8;border-radius:12px;padding:14px;margin:12px 0;line-height:1.7;transition:font-size .15s}
+.phone-size-controls{display:flex;gap:8px;margin:10px 0}
+.phone-size-controls button{flex:1;border:1px solid #cbded3;border-radius:10px;background:#fff;padding:10px 5px;font-weight:900;color:#236b55}
+.phone-size-controls button.selected{background:#dff2e6;border:2px solid #145b42}
+
+
+/* v2.5: 질문/사진 화면의 기록 삭제와 사진 선택 버튼 */
+.screen-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.screen-toolbar .back{margin:0}
+.clear-session-btn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700;line-height:1.25;white-space:nowrap}
+.clear-session-btn:focus-visible{outline:3px solid #deac4b;outline-offset:2px}
+.photo-pick-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.photo-pick-actions button{min-width:116px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="logo">동</div>디지털 동행</div><div class="header-actions"><button class="icon-btn" id="voiceMasterButton" onclick="toggleVoiceEnabled()" aria-label="음성 안내 끄기" title="음성 안내 끄기">🔊</button><button class="icon-btn" onclick="go('settings')" aria-label="설정">⚙</button></div></header>
+<main>
+<section id="home" class="screen active">
+  <div class="hero"><span class="tag">DIGITAL FOR ALL</span><h1>모르는 순간에도,<br>혼자 두지 않을게요.</h1><p>디지털 기기 사용이 어렵다면<br>디지털 동행에게 편하게 물어보세요.</p></div>
+  <div class="section-head"><h2>무엇을 도와드릴까요?</h2><span>원하는 방법을 선택하세요</span></div>
+  <div class="feature-grid">
+    <button class="feature" onclick="go('ask')"><span class="emoji">💬</span><strong>말로·글로 물어보기</strong><small>궁금한 것을 편하게 질문해요.</small></button>
+    <button class="feature" onclick="go('photo')"><span class="emoji">📷</span><strong>화면 사진으로 물어보기</strong><small>어려운 화면을 찍어 올려요.</small></button>
+    <button class="feature" onclick="go('learn')"><span class="emoji">🧭</span><strong>차근차근 배우기</strong><small>생활 속 디지털 사용법을 배워요.</small></button>
+    <button class="feature" onclick="go('learn')"><span class="emoji">🔁</span><strong>다시 연습하기</strong><small>천천히 반복해서 익혀요.</small></button>
+  </div>
+  <div class="section-head"><h2>많이 찾는 도움말</h2><span>기초 학습</span></div>
+  <div class="panel">
+    <div class="topic-list">
+      <button class="topic" onclick="openGuide('키오스크에서 주문하기')"><span>🍔</span>키오스크 주문</button>
+      <button class="topic" onclick="openGuide('스마트폰 글자 크게 하기')"><span>🔎</span>글자 크게 하기</button>
+      <button class="topic" onclick="openGuide('기차표 예매하기')"><span>🚆</span>기차표 예매</button>
+      <button class="topic" onclick="openGuide('온라인 병원 예약 알아보기')"><span>🏥</span>병원 예약</button>
+    </div>
+  </div>
+  <div class="notice">처음 이용하는 분도 괜찮아요. 어려운 말 대신 쉬운 말로, 한 단계씩 안내하는 것을 목표로 해요.</div>
+</section>
+
+<section id="ask" class="screen">
+  <div class="screen-toolbar"><button class="back" onclick="go('home')">← 처음으로</button><button class="clear-session-btn" type="button" onclick="clearChatSession(true)" aria-label="대화 기록 삭제" title="대화 기록 삭제">🗑 대화 삭제</button></div><div class="eyebrow">ASK DIGITAL MATE</div><h1 class="page-title">무엇이 어려우신가요?</h1><p class="sub">먼저 전체 순서를 알려드리고, 한 단계씩 함께 진행해요. 하셨으면 ‘했어요’라고 말씀해 주세요.</p>
+  <div class="chatbox" id="chat"><div class="bubble bot">안녕하세요! 디지털 동행이에요. 어떤 일을 하다가 어려움을 느끼셨나요?</div></div>
+  <div class="composer"><input id="question" placeholder="예: 휴대폰 글자를 크게 하고 싶어요" aria-label="질문 입력"><button class="mic-btn" id="micButton" onclick="startDictation()" aria-label="음성으로 질문" title="음성으로 질문">🎙️</button><button class="primary" id="sendButton" onclick="sendQuestion()">보내기</button></div>
+  <div class="tool-row" id="guideConversationActions"><button class="pill" type="button" onclick="quickChatReply('했어요. 다음 단계 알려주세요.')">✅ 했어요 · 다음 단계</button><button class="pill" type="button" onclick="quickChatReply('현재 단계가 어려워요. 더 쉽게 설명해 주세요.')">❓ 잘 모르겠어요</button><button class="pill" type="button" onclick="quickChatReply('현재 단계를 다시 설명해 주세요.')">↻ 다시 설명</button></div>
+  <div class="tool-row"><button class="pill" onclick="fillQuestion('키오스크 주문 방법 알려줘')">키오스크</button><button class="pill" onclick="fillQuestion('휴대폰 글자를 크게 하려면?')">글자 크기</button><button class="pill" onclick="fillQuestion('기차표 예매 방법 알려줘')">기차표 예매</button></div>
+  <div class="inline-hint" id="aiChatStatus" role="status" aria-live="polite">AI 연결 전에는 기존 도움말을 제공합니다.</div><div class="notice">AI 서버 연결 시 자유로운 질문에 답변합니다. 연결 전에는 기존 도움말을 이용합니다. 비밀번호·주민등록번호·계좌번호 등 민감정보는 입력하지 마세요.</div>
+</section>
+
+<section id="photo" class="screen">
+  <div class="screen-toolbar"><button class="back" onclick="go('home')">← 처음으로</button><button class="clear-session-btn" type="button" onclick="clearPhotoSession(true)" aria-label="사진 및 분석 기록 삭제" title="사진 및 분석 기록 삭제">🗑 기록 삭제</button></div><div class="eyebrow">SCREEN HELP</div><h1 class="page-title">어려운 화면을 보여주세요.</h1><p class="sub">화면을 촬영하거나 사진을 선택하면 어떤 부분이 어려운지 설명할 수 있어요.</p>
+  <div class="upload"><span class="big">📷</span><strong>화면 사진 선택하기</strong><small>갤러리 사진을 선택하거나 카메라로 촬영할 수 있습니다.</small><div class="photo-pick-actions"><button type="button" class="secondary" onclick="document.getElementById('imageInput').click()">🖼️ 갤러리에서 선택</button><button type="button" class="secondary" onclick="document.getElementById('cameraInput').click()">📷 카메라 촬영</button></div><input id="imageInput" type="file" accept="image/*" onchange="previewImage(event)"><input id="cameraInput" type="file" accept="image/*" capture="environment" onchange="previewImage(event)"><img id="preview" class="preview" alt="선택한 사진 미리보기"></div>
+  <label class="field" for="imageQuestion">어떤 점이 어려우신가요? (선택)</label>
+  <textarea id="imageQuestion" placeholder="예: 여기에서 다음 버튼을 찾기 어려워요."></textarea>
+  <button class="primary" style="width:100%;margin-top:12px" onclick="explainImage()">이 화면 설명받기</button>
+  <div id="imageHelpResult" class="callout" role="status" aria-live="polite"></div>
+  <div class="notice">연결된 AI가 사진 속 화면을 분석합니다. 사진은 외부 AI 서비스로 전송되니 주민등록번호·계좌번호·비밀번호 등은 먼저 가려주세요. AI가 버튼 위치를 잘못 판단할 수도 있습니다.</div>
+</section>
+
+<section id="learn" class="screen">
+  <button class="back" onclick="go('home')">← 처음으로</button><div class="eyebrow">LEARN STEP BY STEP</div><h1 class="page-title">하나씩 천천히 배워요.</h1><p class="sub">생활 속에서 자주 만나는 디지털 상황을 골라보세요.</p>
+  <button class="guide-card" onclick="openGuide('키오스크에서 주문하기')"><span>🍔</span><strong>키오스크에서 주문하기</strong><small>메뉴 선택부터 결제 전 확인까지</small></button>
+  <button class="guide-card" onclick="openGuide('스마트폰 글자 크게 하기')"><span>🔎</span><strong>스마트폰 글자 크게 하기</strong><small>화면의 글씨가 작게 느껴질 때</small></button>
+  <button class="guide-card" onclick="openGuide('기차표 예매하기')"><span>🚆</span><strong>기차표 예매하기</strong><small>기차역과 날짜를 고르고 열차표 예매 연습하기</small></button>
+  <button class="guide-card" onclick="openGuide('온라인 병원 예약 알아보기')"><span>🏥</span><strong>온라인 병원 예약 알아보기</strong><small>예약 페이지에서 확인할 내용</small></button>
+  <div id="customGuideList"></div>
+  <div class="notice">도움말은 이 기기의 브라우저에 저장됩니다. 다른 기기에서도 쓰려면 '내보내기' 파일을 보관하세요. 실제 절차는 기기·기관마다 달라질 수 있습니다.</div>
+</section>
+
+<section id="guide" class="screen">
+  <button class="back" onclick="go('learn')">← 도움말 목록</button><div class="eyebrow">EASY GUIDE</div><h1 class="page-title" id="guideTitle">키오스크에서 주문하기</h1><p class="sub">서두르지 말고 화면을 한 단계씩 확인해 보세요.</p>
+  <div class="voice-guide-actions">
+    <button class="secondary voice-play-control" onclick="speakGuideAll()">▶ 전체 안내 듣기</button>
+    <button class="secondary" onclick="stopSpeaking()">■ 재생 중지</button>
+  </div>
+  <div id="guideVoiceState" class="voice-state-label" aria-live="polite">🔊 음성 안내 사용 중</div>
+  <div id="guideVoiceStatus" class="voice-status" aria-live="polite">음성 안내를 켜면 현재 화면에서 꼭 필요한 핵심 문장만 자동으로 읽어줘요.</div>
+  <div class="panel" id="guideSteps"></div>
+  <div id="guideCompletion" class="is-complete"></div><button class="secondary" style="width:100%;margin-top:13px" onclick="startPractice()">🔁 단계별로 다시 연습하기</button>
+  <div class="notice">이 안내는 학습용 예시입니다. 키오스크·기차표 예매 체험은 실제 서비스와 일부 화면·절차가 다를 수 있습니다.</div>
+</section>
+
+<!-- 추가 기능: 순서대로 연습하기 -->
+<section id="practice" class="screen">
+  <button class="back" onclick="openGuide(currentGuide)">← 도움말 보기</button>
+  <div class="eyebrow">PRACTICE</div><h1 class="page-title" id="practiceTitle">다시 연습하기</h1>
+  <p class="sub" id="practiceSub">한 단계씩 읽은 뒤 '완료했어요'를 눌러보세요.</p>
+  <div id="simulationPanel" class="simulation-panel" style="display:none"></div>
+  <div id="guidedPractice" class="practice-card"><div id="practiceCount" class="practice-count"></div><div class="progress-track" aria-label="학습 진행률"><div id="practiceProgress" class="progress-fill"></div></div><div id="practiceBody" class="practice-body"></div>
+    <div id="practiceVoiceState" class="voice-state-label" aria-live="polite">🔊 음성 안내 사용 중</div>
+    <div id="practiceVoiceStatus" class="voice-status" aria-live="polite">음성 안내가 켜져 있으면 현재 단계의 핵심 안내만 자동으로 읽어줘요.</div>
+    <label><input type="checkbox" id="practiceCheck" onchange="updatePracticeButtons()"> 이 단계를 이해했어요</label></div>
+  <div class="editor-actions"><button class="secondary" id="prevStep" onclick="changePractice(-1)">이전 단계</button><button class="primary" id="nextStep" onclick="changePractice(1)">다음 단계</button></div>
+  <button class="secondary" style="width:100%;margin-top:12px" onclick="resetPractice()">처음부터 다시 연습</button>
+</section>
+<!-- 추가 기능: 화면 안에서 도움말 직접 편집 -->
+<section id="editor" class="screen">
+  <button class="back" onclick="go('learn')">← 배우기로</button>
+  <div class="eyebrow">EDIT GUIDE</div><h1 class="page-title">도움말 편집하기</h1>
+  <p class="sub">화면에서 직접 설명을 고쳐도 되고, HTML 파일을 텍스트 편집기로 열어 고쳐도 됩니다.</p>
+  <label class="field" for="editSelect">수정할 도움말</label>
+  <select id="editSelect" onchange="loadEditorSelection()"></select>
+  <label class="field" for="editName">도움말 제목</label><input id="editName" class="editor-input" maxlength="80" placeholder="예: 와이파이 연결하기">
+  <label class="field" for="editEmoji">이모지</label><input id="editEmoji" class="editor-input" maxlength="12" placeholder="📱">
+  <label class="field" for="editDesc">짧은 소개</label><input id="editDesc" class="editor-input" maxlength="120" placeholder="예: 와이파이를 연결하는 순서">
+  <label class="field" for="editSteps">배울 순서 (한 줄에 한 단계씩)</label><textarea id="editSteps" rows="8" placeholder="설정 앱을 엽니다.&#10;와이파이 메뉴를 누릅니다.&#10;원하는 네트워크를 선택합니다."></textarea>
+  <div class="editor-actions"><button class="primary" onclick="saveGuide()">저장하기</button><button class="secondary" onclick="removeGuide()">삭제·복원</button></div>
+  <div class="editor-actions"><button class="secondary" onclick="exportGuides()">도움말 내보내기</button><button class="secondary" onclick="document.getElementById('importInput').click()">도움말 가져오기</button></div>
+  <input id="importInput" type="file" accept=".json,application/json" style="display:none" onchange="importGuides(event)">
+  <p class="inline-hint">기본 도움말은 삭제 대신 원래 내용으로 복원됩니다. 새로 추가한 도움말은 삭제할 수 있습니다. 수정한 내용은 이 브라우저에만 저장됩니다.</p>
+</section>
+<section id="settings" class="screen">
+  <button class="back" onclick="go('home')">← 처음으로</button><div class="eyebrow">ACCESSIBILITY</div><h1 class="page-title">편하게 이용하기</h1><p class="sub">보기 편하고 사용하기 쉬운 환경을 설정해 보세요.</p>
+  <div class="panel">
+    <div class="access-row"><span>글자 크게 보기</span><button class="toggle" id="largeToggle" onclick="toggleLarge()"></button></div>
+    <div class="access-row" style="display:block"><label for="fontScaleControl"><strong>글씨 크기 더 크게</strong></label><div style="display:flex;align-items:center;gap:12px;margin-top:9px"><input id="fontScaleControl" type="range" min="1" max="1.4" step="0.05" value="1.08" style="flex:1;min-width:0" oninput="setFontScale(this.value)"><strong id="fontScaleValue">108%</strong></div><small class="setting-note">기본 글씨보다 최대 40%까지 크게 볼 수 있어요.</small></div>
+    <div class="access-row"><span>고대비 화면</span><button class="toggle" id="contrastToggle" onclick="toggleContrast()"></button></div>
+    <div class="access-row"><span>쉬운 설명 우선</span><button class="toggle on" id="easyToggle" onclick="toggleEasy()" aria-label="쉬운 설명 우선"></button></div>
+    <div class="access-row"><span><strong>음성 안내 기능 사용</strong><br><small>켜면 현재 화면의 핵심 문장만 자동으로 읽어줘요.</small></span><button class="toggle on" id="voiceEnabledToggle" onclick="toggleVoiceEnabled()" aria-label="음성 안내 기능 사용"></button></div>
+    <div class="access-row"><span>질문 답변 자동으로 읽기</span><button class="toggle" id="autoVoiceToggle" onclick="toggleAutoVoice()" aria-label="답변 자동 읽기"></button></div>
+  </div>
+  <div class="panel"><h3>내 기록 관리</h3><p>현재 브라우저에 저장된 학습 기록과 대화 내역만 삭제합니다. 도움말 편집 내용은 유지됩니다.</p><button class="secondary" style="width:100%;margin-top:12px" onclick="resetHistory()">학습 기록·대화 초기화</button></div>
+  <div class="notice">음성 입력·읽기는 브라우저 기능을 이용합니다. AI 답변과 사진 분석은 별도의 무료 할당량 서버 연결이 필요합니다.</div>
+</section>
+</main>
+<nav class="bottom">
+<button class="nav active" data-page="home" onclick="go('home')"><b>⌂</b>홈</button>
+<button class="nav" data-page="ask" onclick="go('ask')"><b>💬</b>질문하기</button>
+<button class="nav" data-page="photo" onclick="go('photo')"><b>▧</b>사진 도움</button>
+<button class="nav" data-page="learn" onclick="go('learn')"><b>☷</b>배우기</button>
+</nav>
+<div id="toast" class="toast" role="status"></div>
+</div>
+<script>
+'use strict';
+/* ===== AI 서버 주소 (현재 사용 중인 Cloudflare Worker) ===== */
+const AI_WORKER_URL = 'https://digital-companion-ai.marchelino02.workers.dev';
+function aiConfigured(){return /^https:\/\/[^\s]+\.workers\.dev\/?$/.test(AI_WORKER_URL) && !AI_WORKER_URL.includes('YOUR-');}
+async function askAI(payload){
+  if(!aiConfigured())throw new Error('AI 서버 주소가 아직 설정되지 않았습니다.');
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),45000);
+  try{
+    const response=await fetch(AI_WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||'AI 응답을 가져오지 못했습니다. ('+response.status+')');
+    if(typeof data.answer!=='string'||!data.answer.trim())throw new Error('AI 응답이 비어 있습니다.');
+    return data.answer.trim();
+  }catch(err){if(err.name==='AbortError')throw new Error('응답 시간이 초과되었습니다. 다시 시도해 주세요.');throw err;}
+  finally{clearTimeout(timer)}
+}
+
+/* ===== 2. 데이터: 여기서 기본 도움말을 수정할 수 있습니다 ===== */
+const DEFAULT_GUIDES = {
+  '키오스크에서 주문하기': {emoji:'🍔',desc:'메뉴 선택부터 결제 전 확인까지',steps:[
+    '화면에서 먹고 싶은 메뉴나 주문 시작 버튼을 찾아 눌러보세요.',
+    '원하는 메뉴와 수량을 선택하세요. 잘못 눌렀다면 취소하거나 이전 화면으로 돌아갈 수 있는지 확인하세요.',
+    '주문한 메뉴와 수량이 맞는지 천천히 확인하세요.',
+    '결제 방법을 선택하기 전에 금액을 다시 확인하세요. 결제가 끝나면 주문 번호나 영수증을 확인하세요.']},
+  '스마트폰 글자 크게 하기': {emoji:'🔎',desc:'화면의 글씨가 작게 느껴질 때',steps:[
+    '휴대폰의 설정 앱을 찾아 열어보세요.',
+    '설정에서 디스플레이 또는 화면 관련 메뉴를 찾아보세요.',
+    '글자 크기 또는 화면 확대 항목을 선택하세요.',
+    '글자 크기를 조금씩 조절하고 읽기 편한 크기인지 확인하세요.']},
+  '기차표 예매하기': {emoji:'🚆',desc:'출발역과 도착역을 고르고 열차표 예매 연습하기',steps:[
+    '기차표 예매 화면에서 출발역과 도착역을 선택하세요.',
+    '출발 날짜와 인원수를 확인한 뒤 열차 조회를 눌러보세요.',
+    '출발 시각과 도착 시각, 열차 종류를 비교해 원하는 열차를 선택하세요.',
+    '선택한 열차와 인원, 금액을 다시 확인하고 예매 완료 화면까지 진행해 보세요.']},
+  '온라인 병원 예약 알아보기': {emoji:'🏥',desc:'예약 페이지에서 확인할 내용',steps:[
+    '병원 공식 홈페이지나 공식 앱인지 먼저 확인하세요.',
+    '진료과와 의료진 등 필요한 항목을 선택하세요.',
+    '예약 가능한 날짜와 시간을 확인하세요.',
+    '예약자 정보와 예약 내용을 다시 확인한 뒤 완료 여부를 확인하세요.']}
+};
+/* ===== 3. 저장 기능: 브라우저 내부 보관, 서버 전송 없음 ===== */
+const STORE_KEY = 'digital-mate-html-v1';
+const NEW_CHAT = [{role:'bot',text:'안녕하세요! 디지털 동행이에요. 어떤 일을 하다가 어려움을 느끼셨나요?'}];
+function stored(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')||{}}catch(e){return {}}}
+let saved = stored();
+let guides = normalizeGuides(saved.guides || DEFAULT_GUIDES);
+// 새 버전 최초 실행 시 음성 안내는 반드시 꺼진 상태로 시작합니다.
+// 이전 버전에서 켜 둔 설정도 v2.3을 처음 열 때 한 번 꺼 주고,
+// 이후 사용자가 직접 켠 선택은 다음 실행에도 유지합니다.
+const VOICE_DEFAULT_MIGRATION_KEY = 'digital-mate-voice-default-v2.3';
+let settings = Object.assign({large:false,contrast:false,easy:true,voiceEnabled:false,autoVoice:false,fontScale:1.08}, saved.settings||{});
+try {
+ if (!localStorage.getItem(VOICE_DEFAULT_MIGRATION_KEY)) {
+  settings.voiceEnabled = false;
+  localStorage.setItem(VOICE_DEFAULT_MIGRATION_KEY, 'done');
+ }
+} catch(e) { settings.voiceEnabled = false; }
+delete settings.endpoint;
+let history = Array.isArray(saved.history) ? saved.history.filter(x=>x && ['bot','user'].includes(x.role) && typeof x.text==='string').slice(-60) : [...NEW_CHAT];
+if (!history.length) history=[...NEW_CHAT];
+let currentGuide='키오스크에서 주문하기', practiceIndex=0, practiceChecks=[], practiceReview=false, editingOriginal='', imageURL=null;
+let selectedImageFile=null, chatSessionVersion=0, photoSessionVersion=0;
+function normalizeGuides(input){
+ const result={};if(!input || typeof input!=='object'||Array.isArray(input))return structuredCloneSafe(DEFAULT_GUIDES);
+ for(const [key,val] of Object.entries(input).slice(0,100)){
+   if(typeof key!=='string'||!key.trim()||key.length>80||!val||typeof val!=='object'||!Array.isArray(val.steps))continue;
+   const steps=val.steps.filter(x=>typeof x==='string' && x.trim()).slice(0,30).map(x=>x.slice(0,500));
+   if(!steps.length)continue;
+   result[key]={emoji:typeof val.emoji==='string'?val.emoji.slice(0,12):'📗',desc:typeof val.desc==='string'?val.desc.slice(0,120):'',steps};
+ }
+ // 이전 버전의 '사진 보내기' 기본 항목은 새 '기차표 예매하기'로 교체합니다.
+ if(result['사진 보내기'] && !result['기차표 예매하기']) delete result['사진 보내기'];
+ return Object.assign(structuredCloneSafe(DEFAULT_GUIDES),result);
+}
+function structuredCloneSafe(o){return JSON.parse(JSON.stringify(o))}
+function persist(){try{const safeSettings={...settings};delete safeSettings.endpoint;localStorage.setItem(STORE_KEY,JSON.stringify({guides,settings:safeSettings,history:history.slice(-60),completed:saved.completed||{}}))}catch(e){console.warn('저장 불가',e)}}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display='none',2700)}
+function go(id){
+ const panel=document.getElementById(id);if(!panel||!panel.classList.contains('screen'))return;
+ const current=document.querySelector('.screen.active')?.id;
+ // 홈 버튼, 하단 메뉴, 화면 내 뒤로가기를 포함하여 해당 화면을 벗어나면 기록 삭제
+ if(current==='ask'&&id!=='ask')clearChatSession(false);
+ if(current==='photo'&&id!=='photo')clearPhotoSession(false);
+ if('speechSynthesis' in window)window.speechSynthesis.cancel();
+ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s===panel));
+ const navId=['guide','practice','editor'].includes(id)?'learn':(id==='settings'?'':'home'===id?'home':id);
+ document.querySelectorAll('.nav').forEach(n=>{const active=n.dataset.page===navId;n.classList.toggle('active',active);n.setAttribute('aria-current',active?'page':'false')});
+ window.scrollTo(0,0);
+ scheduleCurrentScreenSpeech();
+}
+/* ===== v2.5: 질문/사진 화면의 개별 기록 초기화 ===== */
+function clearChatSession(notify=false){
+ chatSessionVersion++;
+ history=[...NEW_CHAT];
+ document.getElementById('question').value='';
+ restoreChat();
+ persist();
+ if(notify)showToast('대화 기록을 삭제했습니다.');
+}
+function clearPhotoSession(notify=false){
+ photoSessionVersion++;
+ selectedImageFile=null;
+ document.getElementById('imageInput').value='';
+ document.getElementById('cameraInput').value='';
+ document.getElementById('imageQuestion').value='';
+ document.getElementById('imageHelpResult').textContent='';
+ const preview=document.getElementById('preview');
+ preview.removeAttribute('src');preview.style.display='none';
+ if(imageURL){URL.revokeObjectURL(imageURL);imageURL=null;}
+ if(notify)showToast('사진과 분석 기록을 삭제했습니다.');
+}
+// 모바일 브라우저 자체 뒤로가기 등으로 페이지에서 나갈 때 대화 기록을 남기지 않음
+window.addEventListener('pagehide',()=>{
+ history=[...NEW_CHAT];persist();
+ clearPhotoSession(false);
+});
+/* ===== 4. 질문하기: 준비된 도움말을 이용한 오프라인 답변 ===== */
+function bestGuide(q){
+ const t=q.toLowerCase().replace(/\s+/g,'');let scores=[];
+ const words={
+ '키오스크에서 주문하기':['키오스크','주문','결제','패스트푸드','카페','음식','메뉴'],
+ '스마트폰 글자 크게 하기':['글자','글씨','글꼴','폰트','화면확대','너무작','크게','디스플레이'],
+ '기차표 예매하기':['기차','기차표','열차','코레일','코레일톡','예매','승차권','기차역'],
+ '온라인 병원 예약 알아보기':['병원','진료','예약','의사','접수','의료진']};
+ for(const [name,g] of Object.entries(guides)){
+   let score=0;
+   const normalizedName=name.replace(/\s+/g,'').toLowerCase();
+   if(t.includes(normalizedName))score+=20;
+   (words[name]||[]).forEach(w=>{if(t.includes(w.toLowerCase()))score+=3});
+   for(const tok of name.toLowerCase().split(/\s+/)){if(tok.length>=2&&t.includes(tok))score+=2}
+   if(score>0)scores.push({name,score});
+ }
+ return scores.sort((a,b)=>b.score-a.score)[0]?.name || null;
+}
+function localAnswer(q){
+ const match=bestGuide(q);
+ if(!match){return '아직 이 질문에 맞는 설명이 준비되지 않았어요.\n\n아래의 ‘배우기’에서 관련 도움말을 골라 확인해 보세요.\n\n키오스크, 휴대폰 글자 크기, 기차표 예매, 병원 예약에 대해서는 바로 안내할 수 있어요.'}
+ const g=guides[match];
+ if(settings.easy)return g.emoji+' '+match+'\n\n'+g.steps.map((s,i)=>(i+1)+'단계. '+s).join('\n\n')+'\n\n자세한 연습은 ‘배우기’에서 할 수 있어요.';
+ return g.emoji+' '+match+'\n'+g.steps.map((s,i)=>(i+1)+'. '+s).join('\n')+'\n※ 기기나 서비스마다 메뉴 이름이 다를 수 있습니다.';
+}
+function appendBubble(role,message,save=true){
+ const chat=document.getElementById('chat'),b=document.createElement('div');b.className='bubble '+(role==='user'?'user':'bot');b.textContent=message;chat.appendChild(b);chat.scrollTop=chat.scrollHeight;
+ if(save){history.push({role,text:message});if(history.length>60)history=history.slice(-60);persist()}
+ return b;
+}
+function restoreChat(){const chat=document.getElementById('chat');chat.replaceChildren();for(const h of history)appendBubble(h.role,h.text,false)}
+function fillQuestion(q){document.getElementById('question').value=q;document.getElementById('question').focus()}
+let aiBusy=false;
+function quickChatReply(value){
+ if(aiBusy){showToast('답변을 받은 뒤 눌러주세요.');return;}
+ const input=document.getElementById('question');input.value=value;
+ sendQuestion();
+}
+async function sendQuestion(){
+ const input=document.getElementById('question'),q=input.value.trim();if(!q){showToast('질문을 먼저 입력해 주세요.');return}
+ if(aiBusy)return;
+ const version=chatSessionVersion;
+ input.value='';appendBubble('user',q);
+ const button=document.getElementById('sendButton');button.disabled=true;aiBusy=true;
+ const status=document.getElementById('aiChatStatus');
+ const previous=history.slice(0,-1).filter(x=>x&&['user','bot'].includes(x.role)).filter(x=>!x.text.startsWith('안녕하세요! 디지털 동행이에요.')).slice(-16).map(x=>({role:x.role==='bot'?'assistant':'user',content:x.text.slice(0,1300)}));
+ const pending=appendBubble('bot','AI가 답변을 준비하고 있습니다…',false);
+ try{
+   status.textContent=aiConfigured()?'AI에 질문을 전달했습니다.':'AI 연결 전: 준비된 도움말로 답변합니다.';
+   const ans=aiConfigured()?await askAI({type:'chat',question:q.slice(0,1500),history:previous}):localAnswer(q);
+   if(version!==chatSessionVersion)return;
+   pending.remove();appendBubble('bot',ans);
+   if(settings.autoVoice&&settings.voiceEnabled)speak(ans);
+ }catch(err){
+   if(version!==chatSessionVersion)return;
+   pending.remove();
+   const fallback=localAnswer(q);
+   const ans='AI 연결에 문제가 생겼습니다: '+err.message+'\n\n[기존 도움말 안내]\n'+fallback;
+   appendBubble('bot',ans);
+   status.textContent='AI 연결 오류 — 기존 도움말을 대신 표시했습니다.';
+ }finally{button.disabled=false;aiBusy=false;}
+}
+/* ===== 5. 음성 읽기/음성 질문: 브라우저 지원 여부에 따름 ===== */
+function speak(text){if(!settings.voiceEnabled){showToast('음성 안내 기능이 꺼져 있어요. 설정이나 상단 스피커 버튼에서 켜주세요.');return}if(!('speechSynthesis' in window)){showToast('이 브라우저에서는 음성 읽기를 지원하지 않아요.');return}
+ window.speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(text.slice(0,2500));utter.lang='ko-KR';utter.rate=.88;
+ const voices=window.speechSynthesis.getVoices();const ko=voices.find(x=>x.lang.toLowerCase().startsWith('ko'));if(ko)utter.voice=ko;
+ utter.onstart=()=>setVoiceStatus('음성 안내를 재생하고 있어요.');
+ utter.onend=()=>setVoiceStatus('음성 안내가 끝났어요.');
+ utter.onerror=()=>setVoiceStatus('음성 안내를 재생하지 못했어요. 브라우저 설정을 확인해 주세요.');
+ window.speechSynthesis.speak(utter);
+}
+function setVoiceStatus(message){
+ ['guideVoiceStatus','practiceVoiceStatus'].forEach(id=>{
+  const el=document.getElementById(id);if(el)el.textContent=message;
+ });
+}
+function stopSpeaking(){
+ if('speechSynthesis' in window){window.speechSynthesis.cancel();setVoiceStatus('음성 안내를 중지했어요.');}
+ else showToast('이 브라우저에서는 음성 읽기를 지원하지 않아요.');
+}
+function speakGuideStep(index){
+ const step=guides[currentGuide]?.steps?.[index];
+ if(!step){showToast('읽을 학습 단계가 없습니다.');return;}
+ speak((index+1)+'단계. '+step);
+}
+function speakGuideAll(){
+ const g=guides[currentGuide];if(!g?.steps?.length){showToast('읽을 학습 안내가 없습니다.');return;}
+ speak(currentGuide+'. '+g.steps.map((step,i)=>(i+1)+'단계. '+step).join(' 다음 단계. '));
+}
+function speakPracticeStep(){
+ const g=guides[currentGuide];const step=g?.steps?.[practiceIndex];
+ if(!step){showToast('읽을 학습 단계가 없습니다.');return;}
+ speak('현재 '+(practiceIndex+1)+'단계입니다. '+step);
+}
+function readCurrentScreen(){
+ if(!settings.voiceEnabled){showToast('음성 안내 기능이 꺼져 있어요. 상단 🔇 버튼을 눌러 켜주세요.');return}
+ if(!('speechSynthesis' in window)){showToast('음성 읽기가 지원되지 않습니다.');return}
+ if(window.speechSynthesis.speaking){window.speechSynthesis.cancel();showToast('음성 읽기를 중지했어요.');return}
+ const panel=document.querySelector('.screen.active');
+ if(panel?.id==='ask'){const last=history.filter(x=>x.role==='bot').slice(-1)[0];speak(last?.text||'무엇이 어려우신가요?');return}
+ if(panel?.id==='photo'&&document.getElementById('imageHelpResult').textContent){speak(document.getElementById('imageHelpResult').textContent);return}
+ if(panel?.id==='practice'){speakPracticeStep();return}
+ if(panel?.id==='guide'){speakGuideAll();return}
+ const headings=[...panel.querySelectorAll('h1,h2')].map(x=>x.innerText).join('. ');
+ const description=panel.querySelector('.sub')?.innerText||'';
+ speak([headings,description].filter(Boolean).join('. ')||'디지털 동행');
+}
+let recognizer=null;
+function startDictation(){
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){showToast('음성 입력은 지원되는 Chrome 등에서 사용할 수 있습니다.');return}
+ if(recognizer){recognizer.stop();return}
+ const r=new SpeechRecognition();recognizer=r;r.lang='ko-KR';r.interimResults=false;r.maxAlternatives=1;
+ const btn=document.getElementById('micButton');btn.classList.add('listening');btn.setAttribute('aria-pressed','true');
+ r.onresult=e=>{const words=e.results?.[0]?.[0]?.transcript;if(words){document.getElementById('question').value=words;showToast('말씀하신 내용을 입력했어요.')}};
+ r.onerror=e=>showToast('음성 입력을 사용할 수 없습니다: '+e.error);
+ r.onend=()=>{recognizer=null;btn.classList.remove('listening');btn.setAttribute('aria-pressed','false')};
+ try{r.start();showToast('질문을 말씀해 주세요.')}catch(e){r.onend();showToast('음성 입력을 시작하지 못했습니다.')}
+}
+/* ===== 6. 사진: 미리보기와 질문에 대한 일반 안내 ===== */
+function previewImage(event){
+ const f=event.target.files[0];if(!f)return;
+ if(!f.type.startsWith('image/')){showToast('사진 파일을 선택해 주세요.');return}
+ if(f.size>12*1024*1024){showToast('12MB 이하 사진을 선택해 주세요.');event.target.value='';return}
+ photoSessionVersion++;
+ selectedImageFile=f;
+ const other=event.target.id==='imageInput'?'cameraInput':'imageInput';document.getElementById(other).value='';
+ if(imageURL)URL.revokeObjectURL(imageURL);imageURL=URL.createObjectURL(f);
+ const img=document.getElementById('preview');img.src=imageURL;img.style.display='block';document.getElementById('imageHelpResult').textContent='';
+}
+async function resizeImageData(file){
+ const bitmap=await createImageBitmap(file);
+ try{
+   const ratio=Math.min(1,1280/Math.max(bitmap.width,bitmap.height));
+   const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*ratio));canvas.height=Math.max(1,Math.round(bitmap.height*ratio));
+   canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);
+   return canvas.toDataURL('image/jpeg',.78);
+ }finally{bitmap.close()}
+}
+let imageBusy=false;
+async function explainImage(){
+ const file=selectedImageFile;const question=document.getElementById('imageQuestion').value.trim();const box=document.getElementById('imageHelpResult');
+ if(!file){showToast('사진을 먼저 선택해 주세요.');return}
+ if(imageBusy)return;
+ if(!aiConfigured()){box.textContent='AI 서버 연결 전입니다. README의 설명에 따라 AI_WORKER_URL을 설정해 주세요. 사진 미리보기만 제공됩니다.';return}
+ const version=photoSessionVersion;
+ imageBusy=true;box.textContent='사진을 분석하고 있습니다. 잠시만 기다려 주세요.';
+ try{
+   const image=await resizeImageData(file);
+   const answer=await askAI({type:'image',image,question:question.slice(0,800)});
+   if(version!==photoSessionVersion)return;
+   box.textContent=answer;
+   if(settings.autoVoice&&settings.voiceEnabled)speak(answer);
+ }catch(err){if(version!==photoSessionVersion)return;box.textContent='사진 분석을 완료하지 못했습니다: '+err.message+'\n\n사진에 비밀번호·개인정보가 포함되어 있지 않은지 확인하고 다시 시도해 주세요.';}
+ finally{imageBusy=false;}
+}
+/* ===== 7. 배우기 및 단계별 반복 학습 ===== */
+function renderCustomGuides(){
+ const box=document.getElementById('customGuideList');box.replaceChildren();
+ for(const [title,g] of Object.entries(guides)){
+  if(Object.hasOwn(DEFAULT_GUIDES,title))continue;
+  const btn=document.createElement('button');btn.className='guide-card';
+  const icon=document.createElement('span');icon.textContent=g.emoji;
+  const strong=document.createElement('strong');strong.textContent=title;
+  const small=document.createElement('small');small.textContent=g.desc;
+  btn.append(icon,strong,small);btn.onclick=()=>openGuide(title);box.append(btn);
+ }
+}
+function openGuide(name){
+ if(!guides[name]){showToast('해당 도움말을 찾지 못했어요.');return}
+ currentGuide=name;document.getElementById('guideTitle').textContent=name;
+ const box=document.getElementById('guideSteps');box.replaceChildren();
+ guides[name].steps.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='step';const n=document.createElement('span');n.className='num';n.textContent=i+1;
+  const content=document.createElement('div');
+  const p=document.createElement('p');p.textContent=s;
+  content.append(p);d.append(n,content);box.append(d);
+ });
+ document.getElementById('guideCompletion').textContent=saved.completed?.[name]?'✓ 이 도움말의 연습을 완료했습니다.':'';
+ go('guide');
+}
+let simulation={kind:'',stage:0,cart:[],payment:'카드',from:'서울',to:'부산',date:'',train:null,passengers:1,takeout:'',itemChoice:null,selectedMenuIndex:null,drink:'콜라',side:'감자튀김 M',goal:null,fontOpenedDisplay:false,fontOpenedSize:false,fontSize:'보통',hospitalMonth:null,hospitalDate:'',hospitalTime:'',hospitalDepartment:'',hospitalConfirmed:false,hospitalName:'',hospitalPhone:'',hospitalSymptom:''};
+const KIOSK_ITEMS=[{name:'불고기 버거',price:5500,emoji:'🍔',burger:true},{name:'치즈 버거',price:4900,emoji:'🧀',burger:true},{name:'감자튀김',price:2500,emoji:'🍟'},{name:'아메리카노',price:3000,emoji:'☕'}];
+const KIOSK_DRINKS=['사이다','콜라','커피','오렌지 주스'];
+const KIOSK_SIDES=['감자튀김 M','감자튀김 L','치즈스틱','양념감자'];
+const KIOSK_BURGERS=KIOSK_ITEMS.filter(x=>x.burger);
+const KIOSK_GOALS=[
+ {takeout:'포장',burger:'불고기 버거',type:'세트',drink:'콜라',side:'감자튀김 M'},
+ {takeout:'매장 식사',burger:'치즈 버거',type:'단품'},
+ {takeout:'포장',burger:'치즈 버거',type:'세트',drink:'사이다',side:'치즈스틱'},
+ {takeout:'매장 식사',burger:'불고기 버거',type:'세트',drink:'오렌지 주스',side:'감자튀김 L'},
+ {takeout:'포장',burger:'불고기 버거',type:'단품'}
+];
+const TRAIN_GOALS=[
+ {from:'서울',to:'부산',passengers:1,trainIndex:0},
+ {from:'대전',to:'동대구',passengers:2,trainIndex:1},
+ {from:'용산',to:'광주송정',passengers:1,trainIndex:2},
+ {from:'동대구',to:'부산',passengers:3,trainIndex:0},
+ {from:'부산',to:'서울',passengers:2,trainIndex:1}
+];
+const TRAIN_STATIONS=['서울','용산','대전','동대구','부산','광주송정'];
+function pickRandom(list){return list[Math.floor(Math.random()*list.length)]}
+let previousGoalKeys={};
+function pickDifferent(list,keyFn,kind){let item=pickRandom(list);for(let i=0;i<12&&keyFn(item)===previousGoalKeys[kind];i++)item=pickRandom(list);previousGoalKeys[kind]=keyFn(item);return item}
+function createGoal(kind){
+ if(kind==='kiosk')return {...pickDifferent(KIOSK_GOALS,x=>JSON.stringify(x),'kiosk')};
+ if(kind==='train'){
+  const routes=[['대전','동대구'],['용산','광주송정'],['동대구','부산'],['부산','서울'],['서울','대전'],['광주송정','용산'],['부산','대전'],['서울','동대구']];
+  let g;for(let i=0;i<12;i++){const route=pickRandom(routes);const tripDate=new Date();tripDate.setDate(tripDate.getDate()+1+Math.floor(Math.random()*21));g={from:route[0],to:route[1],passengers:1+Math.floor(Math.random()*3),trainIndex:Math.floor(Math.random()*TRAIN_OPTIONS.length),date:`${tripDate.getFullYear()}-${String(tripDate.getMonth()+1).padStart(2,'0')}-${String(tripDate.getDate()).padStart(2,'0')}`};if(JSON.stringify(g)!==previousGoalKeys.train)break;}
+  previousGoalKeys.train=JSON.stringify(g);return g;
+ }
+ if(kind==='font')return pickDifferent([{fontSize:'크게'},{fontSize:'보통'}],x=>x.fontSize,'font');
+ if(kind==='hospital'){
+  const now=new Date();const valid=[];for(let d=now.getDate()+1;d<=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();d++){if(!hospitalSoldOutDay(d))valid.push(hospitalDateKey(now.getFullYear(),now.getMonth(),d));}
+  if(!valid.length){const next=new Date(now.getFullYear(),now.getMonth()+1,1);for(let d=1;d<=new Date(next.getFullYear(),next.getMonth()+1,0).getDate();d++){if(!hospitalSoldOutDay(d))valid.push(hospitalDateKey(next.getFullYear(),next.getMonth(),d));}}
+  const times=['09:00','10:00','10:30','11:30','13:30','14:30','15:00','16:00'];
+  const symptoms=['잦은 기침','감기 증상','두통','허리 통증','피부 가려움','소화 불편'];
+  const names=['김민준','이서준','박서연','최서윤','정민수','김지우','이민지','박지훈','최유진','정수빈','강민서','윤서아','장도윤','한지민','오현우','임수아'];
+  let g={date:pickRandom(valid),time:pickRandom(times),name:pickDifferent(names,x=>x,'hospitalName'),phone:'1234-1234',symptom:pickRandom(symptoms)};
+  for(let i=0;i<12&&JSON.stringify(g)===previousGoalKeys.hospital;i++)g={date:pickRandom(valid),time:pickRandom(times),name:pickDifferent(names,x=>x,'hospitalName'),phone:'1234-1234',symptom:pickRandom(symptoms)};
+  previousGoalKeys.hospital=JSON.stringify(g);return g;
+ }
+ return null;
+}
+const TRAIN_OPTIONS=[{name:'KTX 015',from:'09:00',to:'11:18',price:59800,kind:'KTX'},{name:'KTX 021',from:'10:15',to:'12:33',price:59800,kind:'KTX'},{name:'KTX 033',from:'12:00',to:'14:18',price:59800,kind:'KTX'}];
+function startPractice(){
+ lastPracticeSpeech='';
+ practiceIndex=0;practiceReview=false;practiceChecks=guides[currentGuide]?.steps.map(()=>false)||[];
+ const simKind=currentGuide==='키오스크에서 주문하기'?'kiosk':currentGuide==='기차표 예매하기'?'train':currentGuide==='스마트폰 글자 크게 하기'?'font':currentGuide==='온라인 병원 예약 알아보기'?'hospital':'';
+ const today=new Date();
+ simulation={kind:simKind,stage:simKind==='kiosk'?-1:0,cart:[],payment:'카드',from:'서울',to:'부산',date:'',train:null,passengers:1,takeout:'',itemChoice:null,selectedMenuIndex:null,drink:'',side:'',goal:createGoal(simKind),fontOpenedDisplay:false,fontOpenedSize:false,fontSize:'보통',hospitalMonth:new Date(today.getFullYear(),today.getMonth(),1),hospitalDate:'',hospitalTime:'',hospitalDepartment:'',hospitalConfirmed:false,hospitalName:'',hospitalPhone:'',hospitalSymptom:''};
+ // 기차 예매 화면은 목표와 분리해 서울→부산, 날짜 미선택 상태에서 시작합니다.
+ if(simKind==='hospital'){simulation.hospitalMonth=new Date(Number(simulation.goal.date.slice(0,4)),Number(simulation.goal.date.slice(5,7))-1,1);}
+ lastPracticeSpeech='';renderPractice();go('practice');
+}
+function renderPractice(){
+ const g=guides[currentGuide];if(!g)return;
+ const isSim=!!simulation.kind;
+ document.getElementById('practiceTitle').textContent=currentGuide;
+ document.getElementById('practiceSub').textContent=isSim?'실제 앱과 비슷한 가상 화면에서 버튼을 직접 눌러보세요.':"한 단계씩 읽은 뒤 '완료했어요'를 눌러보세요.";
+ document.getElementById('simulationPanel').style.display=isSim?'block':'none';
+ document.getElementById('guidedPractice').style.display=isSim?'none':'block';
+ document.querySelector('#practice .editor-actions').style.display=isSim?'none':'flex';
+ document.querySelector('#practice > button.secondary[onclick="resetPractice()"]')?.style.setProperty('display',isSim?'none':'block');
+ if(isSim){renderSimulation();return;}
+ if(practiceReview){renderGuideEvaluation();return;}
+ document.querySelector('#practice .practice-voice').style.display='flex';document.getElementById('practiceVoiceState').style.display='block';document.getElementById('practiceVoiceStatus').style.display='block';document.querySelector('#practice .editor-actions').style.display='flex';document.querySelector('#practice > button.secondary[onclick="resetPractice()"]')?.style.setProperty('display','block');
+ document.getElementById('practiceTitle').textContent=currentGuide;
+ document.getElementById('practiceCount').textContent=(practiceIndex+1)+' / '+g.steps.length+' 단계';
+ document.getElementById('practiceProgress').style.width=(((practiceIndex+(practiceChecks[practiceIndex]?1:0))/g.steps.length)*100)+'%';
+ document.getElementById('practiceBody').textContent=g.steps[practiceIndex];
+ document.getElementById('practiceCheck').checked=!!practiceChecks[practiceIndex];
+ document.getElementById('prevStep').disabled=practiceIndex===0;
+ updatePracticeButtons();
+}
+function renderSimulation(){
+ const box=document.getElementById('simulationPanel');
+ const kind=simulation.kind;
+ const total=kind==='kiosk'?5:kind==='train'?4:kind==='font'?4:4;
+ const stage=kind==='kiosk'?Math.max(0,simulation.stage+1):simulation.stage;
+ const progress=kind==='kiosk'&&simulation.stage===-1?0:Math.round((stage/total)*100);
+ const labels={kiosk:'키오스크 주문',train:'기차표 예매',font:'스마트폰 글자 설정',hospital:'병원 예약'};
+ let html=`<div class="sim-progress">${kind==='kiosk'&&simulation.stage===-1?'주문 목표 확인':`체험 ${Math.min(stage,total)} / ${total} · 진행률 ${progress}%`}</div><div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>`;
+ if(kind==='kiosk') html+=renderKioskScreen();
+ else if(kind==='train') html+=renderTrainScreen();
+ else if(kind==='font') html+=renderFontScreen();
+ else if(kind==='hospital') html+=renderHospitalScreen();
+ box.innerHTML=html;
+ scheduleCurrentScreenSpeech();
+}
+let lastPracticeSpeech='';
+let screenSpeechTimer=null;
+// 화면 전체를 읽지 않고, 현재 화면에서 사용자가 꼭 알아야 할 핵심 문장만 골라 읽습니다.
+function importantScreenMessage(panel){
+ if(!panel)return '';
+ const clean=(value)=>String(value||'').replace(/\s+/g,' ').replace(/[▶🔊🔇■]/g,'').trim();
+ const first=(selector)=>clean(panel.querySelector(selector)?.innerText||'');
+ const limit=(value,max=260)=>clean(value).slice(0,max);
+ const id=panel.id;
+ if(id==='home'){
+  return '디지털 동행입니다. '+first('.hero p')+' '+first('.section-head h2');
+ }
+ if(id==='learn'){
+  return first('.page-title')+'. '+first('.sub')+' 원하는 학습 항목을 선택해 시작하세요.';
+ }
+ if(id==='guide'){
+  const title=first('#guideTitle'),desc=first('#guide .sub');
+  const firstStep=limit(panel.querySelector('#guideSteps .step p')?.innerText,150);
+  return [title,desc,firstStep?'첫 번째 단계입니다. '+firstStep:''].filter(Boolean).join('. ');
+ }
+ if(id==='practice'){
+  const sim=panel.querySelector('#simulationPanel');
+  if(sim&&sim.style.display!=='none'){
+   const goal=limit(sim.querySelector('.kiosk-goal,.train-goal,.font-goal,.hospital-goal')?.innerText,220);
+   const title=first('#simulationPanel .mock-title');
+   const desc=limit(panel.querySelector('#simulationPanel .mock-desc')?.innerText,180);
+   const progress=first('#simulationPanel .sim-progress');
+   // 평가 화면에서는 결과와 다시 연습할 방법만 읽습니다.
+   const evaluation=panel.querySelector('#simulationPanel .mock-evaluation');
+   if(evaluation){
+    const result=limit(evaluation.querySelector('.eval-feedback')?.innerText,220);
+    return [title, result||desc, '화면의 다시 연습하기 버튼으로 같은 목표에 도전할 수 있어요.'].filter(Boolean).join('. ');
+   }
+   return [progress,goal,title,desc].filter(Boolean).join('. ');
+  }
+  if(panel.querySelector('#practiceBody')){
+   const title=first('#practiceTitle');
+   const count=first('#practiceCount');
+   const body=limit(first('#practiceBody'),280);
+   return [title,count,body].filter(Boolean).join('. ');
+  }
+ }
+ if(id==='ask'){
+  const last=history.filter(x=>x.role==='bot').slice(-1)[0];
+  if(last)return '답변입니다. '+limit(last.text,360);
+  return first('.page-title')+'. '+first('.sub');
+ }
+ if(id==='photo'){
+  const result=first('#imageHelpResult');
+  return result?limit(result,320):first('.page-title')+'. '+first('.sub')+' 사진을 선택하고 어려운 점을 적어주세요.';
+ }
+ if(id==='settings'){
+  return '편하게 이용하기 설정입니다. 글자 크기, 고대비 화면, 쉬운 설명, 음성 안내를 조절할 수 있어요. '+(settings.voiceEnabled?'음성 안내가 켜져 있습니다.':'음성 안내가 꺼져 있습니다.');
+ }
+ return [first('.page-title'),first('.sub')].filter(Boolean).join('. ');
+}
+function scheduleCurrentScreenSpeech(){
+ if(!settings.voiceEnabled)return;
+ clearTimeout(screenSpeechTimer);
+ screenSpeechTimer=setTimeout(()=>{
+  if(!settings.voiceEnabled)return;
+  const panel=document.querySelector('.screen.active');if(!panel)return;
+  const text=importantScreenMessage(panel);
+  if(!text||text===lastPracticeSpeech)return;
+  lastPracticeSpeech=text;speak(text);
+ },350);
+}
+function enableScreenSpeechObserver(){
+ if(!('MutationObserver' in window))return;
+ const observer=new MutationObserver(()=>scheduleCurrentScreenSpeech());
+ document.querySelectorAll('.screen').forEach(panel=>observer.observe(panel,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','aria-selected','disabled']}));
+}
+
+function kioskGoalMarkup(){const g=simulation.goal||KIOSK_GOALS[0];return `<div class="kiosk-goal"><strong>🎯 오늘의 주문 목표</strong>${g.takeout}으로 <b>${g.burger} ${g.type} 1개</b>를 주문해 보세요.${g.type==='세트'?`<br>음료는 ${g.drink}, 사이드는 ${g.side}를 선택하세요.`:''}</div>`}
+function kioskCartCount(){return simulation.cart.reduce((sum,item)=>sum+item.qty,0)}
+function kioskCartBar(){return `<div class="kiosk-cartbar"><span>🛒 장바구니 <strong>${kioskCartCount()}개</strong></span><button class="mock-subaction" onclick="simulation.stage=2;renderSimulation()">장바구니 확인</button></div>`}
+function evaluateKiosk(){
+ const g=simulation.goal||KIOSK_GOALS[0];
+ const targetName=g.type==='세트'?`${g.burger} - 세트 (${g.drink}, ${g.side})`:`${g.burger} - 단품`;
+ const found=simulation.cart.find(x=>x.name===targetName&&x.qty===1);
+ const exact=!!found&&simulation.cart.length===1&&simulation.cart.every(x=>x.qty===1);
+ return {g,targetName,exact,checks:[
+  ['식사 방식',simulation.takeout===g.takeout,`목표: ${g.takeout}`],
+  ['메뉴와 구성',!!found,`목표: ${targetName}`],
+  ['주문 수량',simulation.cart.reduce((a,x)=>a+x.qty,0)===1, '목표: 총 1개'],
+  ['불필요한 메뉴 없이 주문',exact,'목표에 맞는 메뉴만 담기']
+ ]};
+}
+function renderKioskEvaluation(){
+ const e=evaluateKiosk();const score=e.checks.filter(x=>x[1]).length;const ok=score===e.checks.length;
+ const rows=e.checks.map(x=>`<div class="eval-line"><span>${x[0]}<br><small>${x[2]}</small></span><strong class="${x[1]?'eval-good':'eval-fix'}">${x[1]?'✓ 성공':'다시 확인'}</strong></div>`).join('');
+ const feedback=ok?'목표에 맞게 정확히 주문했어요! 포장·매장 식사와 메뉴 구성을 잘 확인했어요.':`목표 ${e.checks.length}개 항목 중 ${score}개를 맞혔어요. 틀린 항목은 장바구니에서 메뉴를 취소하거나 수량을 조절한 뒤 다시 확인해 보세요.`;
+ return `<div class="mock-success"><div class="check">${ok?'🎉':'📝'}</div><div class="mock-title">주문 목표 평가</div><p class="mock-desc">${score} / ${e.checks.length} 항목 성공</p></div><div class="mock-evaluation"><h3>내 주문 확인하기</h3>${rows}<p class="eval-feedback"><b>${ok?'참 잘했어요!':'조금만 더 연습해 봐요.'}</b><br>${feedback}<br><br><b>다음에 기억할 점:</b> 주문 목표와 장바구니의 메뉴·수량을 결제 전에 꼭 비교해 보세요.</p></div><button class="mock-action" onclick="completeSimulation()">평가 확인하고 마치기</button>${ok?`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 주문 목표로 다시 연습</button>`:`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(false)">같은 목표로 처음부터 다시 해보기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 주문 목표로 다시 연습</button>`}<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=2;renderSimulation()">장바구니 수정하기</button>`;
+}
+function renderKioskScreen(){
+ const s=simulation.stage;let body='';
+ if(s===-1){body=`${kioskGoalMarkup()}<div class="mock-title">주문 연습을 시작해 볼까요?</div><p class="mock-desc">먼저 오늘의 주문 목표를 확인한 뒤, 실제 키오스크처럼 직접 주문해 보세요.</p><button class="mock-action" onclick="simulation.stage=0;renderSimulation()">목표 확인했어요. 시작하기</button>`}
+ if(s===0){body=`${kioskGoalMarkup()}<div class="mock-title">매장 식사인가요, 포장인가요?</div><p class="mock-desc">둘 중 하나만 선택해 주세요.</p><div class="mock-grid"><button class="mock-choice ${simulation.takeout==='매장 식사'?'selected':''}" onclick="simulation.takeout='매장 식사';renderSimulation()"><span class="mock-emoji">🍽️</span>매장 식사</button><button class="mock-choice ${simulation.takeout==='포장'?'selected':''}" onclick="simulation.takeout='포장';renderSimulation()"><span class="mock-emoji">🥡</span>포장</button></div><button class="mock-action" onclick="simulation.stage=1;renderSimulation()" ${simulation.takeout?'':'disabled'}>다음</button>`}
+ if(s===1){
+  const choice=simulation.itemChoice;
+  let chooser='';
+  if(choice){const item=KIOSK_ITEMS[choice.index];
+   if(choice.step==='type') chooser=`<div class="mock-title">${item.name} 선택</div><p class="mock-desc">단품으로 주문할까요, 세트로 주문할까요?</p><div class="mock-options"><button class="mock-choice ${choice.type==='단품'?'selected':''}" onclick="kioskSetType('단품')">단품<br><small> ${item.price.toLocaleString('ko-KR')}원</small></button><button class="mock-choice ${choice.type==='세트'?'selected':''}" onclick="kioskSetType('세트')">세트<br><small> ${ (item.price+3000).toLocaleString('ko-KR')}원부터</small></button></div><button class="mock-subaction kiosk-back" onclick="simulation.itemChoice=null;renderSimulation()">메뉴 목록으로 돌아가기</button>`;
+   else if(choice.step==='drink') chooser=`<div class="mock-title">음료를 선택해 주세요</div><div class="kiosk-options">${KIOSK_DRINKS.map(x=>`<button class="mock-choice ${simulation.drink===x?'selected':''}" onclick="simulation.drink='${x}';renderSimulation()">🥤 ${x}</button>`).join('')}</div><button class="mock-action" ${simulation.drink?'':'disabled'} onclick="simulation.itemChoice.step='side';renderSimulation()">다음: 사이드 선택</button><button class="mock-subaction kiosk-back" onclick="simulation.itemChoice=null;renderSimulation()">메뉴 목록으로 돌아가기</button>`;
+   else chooser=`<div class="mock-title">사이드를 선택해 주세요</div><div class="kiosk-options">${KIOSK_SIDES.map(x=>`<button class="mock-choice ${simulation.side===x?'selected':''}" onclick="simulation.side='${x}';renderSimulation()">🍟 ${x}</button>`).join('')}</div><button class="mock-action" ${simulation.side?'':'disabled'} onclick="kioskAddConfigured()">세트 장바구니에 담기</button><button class="mock-subaction kiosk-back" onclick="simulation.itemChoice=null;renderSimulation()">메뉴 목록으로 돌아가기</button>`;
+  }
+  body=`${kioskGoalMarkup()}<div class="mock-title">메뉴를 선택해 주세요</div><p class="mock-desc">버거를 누르면 단품 또는 세트를 선택할 수 있어요.</p><div class="mock-grid">${KIOSK_ITEMS.map((it,i)=>`<button class="mock-choice ${(choice&&choice.index===i)||simulation.selectedMenuIndex===i?'selected':''}" onclick="kioskSelectItem(${i})"><span class="mock-emoji">${it.emoji}</span>${it.name}<br><small class="kiosk-item-price">${it.price.toLocaleString('ko-KR')}원${it.burger?' · 단품 기준':''}</small></button>`).join('')}</div>${kioskCartBar()}${chooser?`<div class="mock-device" style="margin-top:12px"><div class="mock-body">${chooser}</div></div>`:''}<button class="mock-action" ${simulation.cart.length?'':'disabled'} onclick="simulation.stage=2;simulation.itemChoice=null;renderSimulation()">주문 내역 확인하기</button>`;
+ }
+ if(s===2){const sum=simulation.cart.reduce((a,b)=>a+b.price*b.qty,0);body=`${kioskGoalMarkup()}<div class="mock-title">장바구니를 확인해 주세요</div><p class="mock-desc">잘못 담은 메뉴는 빼거나 수량을 줄일 수 있어요. 다시 메뉴를 추가할 수도 있습니다.</p>${simulation.cart.length?simulation.cart.map((it,i)=>`<div class="mock-row"><span><b>${it.name}</b><br><small>${it.price.toLocaleString('ko-KR')}원</small><br><button class="mock-qty-button kiosk-cart-remove" onclick="kioskRemove(${i})">이 메뉴 취소</button></span><span class="mock-qty"><button onclick="kioskQty(${i},-1)" aria-label="수량 줄이기">−</button>${it.qty}<button onclick="kioskQty(${i},1)" aria-label="수량 늘리기">＋</button></span></div>`).join(''):'<p class="mock-desc">장바구니가 비어 있어요. 메뉴를 다시 선택해 주세요.</p>'}<div class="mock-total"><span>총 주문 금액</span><span>${sum.toLocaleString('ko-KR')}원</span></div><button class="mock-subaction kiosk-back" onclick="simulation.stage=1;renderSimulation()">＋ 메뉴 더 담기</button><p class="mock-desc" style="margin-top:13px">결제 방법</p><div class="mock-grid">${['카드','간편결제'].map(x=>`<button class="mock-choice ${simulation.payment===x?'selected':''}" onclick="simulation.payment='${x}';renderSimulation()">${x==='카드'?'💳':'📱'}<br>${x}</button>`).join('')}</div><button class="mock-action" ${simulation.cart.length?'':'disabled'} onclick="kioskNext()">결제 화면으로 이동</button>`}
+ if(s===3){body=`<div class="mock-title">결제 방법을 확인해 주세요</div><p class="mock-desc">선택한 결제 방법은 <strong>${simulation.payment}</strong>입니다. 실제 결제는 하지 않고 화면만 체험합니다.</p><div class="mock-grid"><div class="mock-choice selected"><span class="mock-emoji">${simulation.payment==='카드'?'💳':'📱'}</span>${simulation.payment} 결제</div><div class="mock-choice"><span class="mock-emoji">🔒</span>안전 확인</div></div><button class="mock-action" onclick="kioskNext()">가상 결제 진행하기</button>`}
+ if(s===4){body=renderKioskEvaluation();}
+ return `<div class="mock-device"><div class="mock-top"><span>🍔 맛있는 버거</span><small>주문 연습용 키오스크</small></div><div class="mock-body">${body}</div></div><div class="mock-hint">가상 체험 화면입니다. 메뉴와 가격은 예시이며 실제 주문이나 결제는 발생하지 않습니다.</div><button class="mock-subaction" style="width:100%;margin-top:10px" onclick="resetPractice()">처음부터 다시 체험</button>`;
+}
+function kioskSelectItem(index){const item=KIOSK_ITEMS[index];simulation.selectedMenuIndex=index;simulation.itemChoice=item.burger?{index,step:'type',type:''}:null;if(!item.burger){kioskAdd(index);return}renderSimulation()}
+function kioskSetType(type){simulation.itemChoice.type=type;if(type==='단품'){const item=KIOSK_ITEMS[simulation.itemChoice.index];kioskAddSimple(item.name+' - 단품',item.price,item.emoji);simulation.itemChoice=null;simulation.stage=1;renderSimulation();return}simulation.itemChoice.step='drink';renderSimulation()}
+function kioskAddSimple(name,price,emoji){const found=simulation.cart.find(x=>x.name===name);if(found)found.qty++;else simulation.cart.push({name,price,emoji,qty:1})}
+function kioskAddConfigured(){const item=KIOSK_ITEMS[simulation.itemChoice.index];const name=`${item.name} - 세트 (${simulation.drink}, ${simulation.side})`;const sideExtra=simulation.side==='감자튀김 L'?500:simulation.side==='치즈스틱'?700:simulation.side==='양념감자'?300:0;const drinkExtra=simulation.drink==='커피'?500:0;kioskAddSimple(name,item.price+3000+sideExtra+drinkExtra,item.emoji);simulation.itemChoice=null;simulation.stage=1;renderSimulation()}
+function kioskNext(){simulation.stage=Math.min(4,simulation.stage+1);renderSimulation()}
+function kioskAdd(index){const item=KIOSK_ITEMS[index];kioskAddSimple(item.name,item.price,item.emoji);renderSimulation()}
+function kioskQty(index,delta){simulation.cart[index].qty+=delta;if(simulation.cart[index].qty<=0)simulation.cart.splice(index,1);renderSimulation()}
+function kioskRemove(index){simulation.cart.splice(index,1);renderSimulation()}
+function trainGoalMarkup(){const g=simulation.goal||TRAIN_GOALS[0];const t=TRAIN_OPTIONS[g.trainIndex];return `<div class="kiosk-goal"><strong>🎯 이번 예매 목표</strong><b>${g.from} → ${g.to}</b> · ${g.date}<br>어른 ${g.passengers}명 · <b>${t.kind} ${t.name.replace(t.kind,'').trim()}</b><br>출발 <b>${t.from}</b> · 도착 <b>${t.to}</b> 열차를 선택해 보세요.</div>`}
+function evaluateTrain(){const g=simulation.goal||TRAIN_GOALS[0];const t=TRAIN_OPTIONS[g.trainIndex];return {g,t,checks:[['출발역',simulation.from===g.from,`목표: ${g.from}`],['도착역',simulation.to===g.to,`목표: ${g.to}`],['출발 날짜',simulation.date===g.date,`목표: ${g.date}`],['인원',simulation.passengers===g.passengers,`목표: 어른 ${g.passengers}명`],['열차',!!simulation.train&&simulation.train.name===t.name,`목표: ${t.kind} ${t.name.replace(t.kind,'').trim()}`]]}}
+function renderTrainEvaluation(){const e=evaluateTrain();const score=e.checks.filter(x=>x[1]).length;const ok=score===e.checks.length;const rows=e.checks.map(x=>`<div class="eval-line"><span>${x[0]}<br><small>${x[2]}</small></span><strong class="${x[1]?'eval-good':'eval-fix'}">${x[1]?'✓ 성공':'다시 확인'}</strong></div>`).join('');const feedback=ok?'예매 목표에 맞는 정보를 정확히 선택했어요!':`목표 ${e.checks.length}개 항목 중 ${score}개를 맞혔어요. 출발역·도착역·날짜·인원·열차를 다시 비교해 보세요.`;return `<div class="mock-success"><div class="check">${ok?'🎉':'📝'}</div><div class="mock-title">예매 목표 평가</div><p class="mock-desc">${score} / ${e.checks.length} 항목 성공</p></div><div class="mock-evaluation"><h3>내가 선택한 예매 정보</h3>${rows}<p class="eval-feedback"><b>${ok?'참 잘했어요!':'다시 확인하면 더 잘할 수 있어요.'}</b><br>${feedback}<br><br><b>다음에 기억할 점:</b> 예매 전 출발역과 도착역, 날짜, 인원, 열차 시간을 한 번 더 확인하세요.</p></div><button class="mock-action" onclick="completeSimulation()">평가 확인하고 마치기</button>${ok?`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 예매 목표로 다시 연습</button>`:`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(false)">같은 목표로 처음부터 다시 해보기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 예매 목표로 다시 연습</button>`}`}
+function renderTrainScreen(){
+ const s=simulation.stage;let body='';
+ if(s===0){body=`${trainGoalMarkup()}<div class="mock-title">승차권 예매</div><p class="mock-desc">출발역과 도착역, 날짜를 선택해 주세요.</p><label class="field">출발역</label><select class="mock-field" onchange="simulation.from=this.value">${['서울','용산','대전','동대구','부산','광주송정'].map(x=>`<option ${simulation.from===x?'selected':''}>${x}</option>`).join('')}</select><label class="field">도착역</label><select class="mock-field" onchange="simulation.to=this.value">${['부산','서울','대전','동대구','광주송정','용산'].map(x=>`<option ${simulation.to===x?'selected':''}>${x}</option>`).join('')}</select><label class="field">출발 날짜</label><input class="mock-field" type="date" value="${simulation.date||''}" onchange="simulation.date=this.value"><label class="field">인원</label><select class="mock-field" onchange="simulation.passengers=Number(this.value)"><option value="1" ${simulation.passengers===1?'selected':''}>어른 1명</option><option value="2" ${simulation.passengers===2?'selected':''}>어른 2명</option><option value="3" ${simulation.passengers===3?'selected':''}>어른 3명</option></select><button class="mock-action" onclick="trainSearch()">열차 조회하기</button>`}
+ if(s===1){body=`${trainGoalMarkup()}<div class="mock-title">열차 조회 결과</div><p class="mock-desc">${simulation.from} → ${simulation.to} · ${simulation.date} · 어른 ${simulation.passengers}명</p>${TRAIN_OPTIONS.map((t,i)=>`<div class="mock-train"><div class="mock-train-head"><span>${t.kind} ${t.name.replace(t.kind,'').trim()}</span><small>일반실</small></div><div class="mock-train-time"><span>${t.from}</span><small>──────▶</small><span>${t.to}</span></div><div class="mock-row"><small>예상 소요 시간 · ${t.price.toLocaleString('ko-KR')}원 / 1인</small><button class="mock-subaction" onclick="trainChoose(${i})">${simulation.train?.name===t.name?'✓ 선택됨':'선택'}</button></div></div>`).join('')}<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=0;renderSimulation()">조건 다시 선택</button>`}
+ if(s===2){const t=simulation.train;body=`${trainGoalMarkup()}<div class="mock-title">예매 정보를 확인해 주세요</div><div class="mock-train"><div class="mock-train-head"><span>${t.name}</span><small>일반실</small></div><div class="mock-train-time"><span>${t.from}</span><small>→</small><span>${t.to}</span></div><div class="mock-row"><span>구간</span><strong>${simulation.from} → ${simulation.to}</strong></div><div class="mock-row"><span>날짜</span><strong>${simulation.date}</strong></div><div class="mock-row"><span>인원</span><strong>어른 ${simulation.passengers}명</strong></div><div class="mock-total"><span>총 금액</span><span>${(t.price*simulation.passengers).toLocaleString('ko-KR')}원</span></div></div><button class="mock-action" onclick="simulation.stage=3;renderSimulation()">예매 내용 확인하기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=1;renderSimulation()">다른 열차 선택</button>`}
+ if(s===3){body=renderTrainEvaluation()}
+ return `<div class="mock-device"><div class="mock-top"><span>🚆 기차표 예매</span><small>승차권 예매 연습</small></div><div class="mock-body">${body}</div></div><div class="mock-hint">코레일 앱과 유사한 흐름을 익히기 위한 가상 화면입니다. 열차 시간과 요금은 예시이며 실제 예매·결제는 발생하지 않습니다.</div><button class="mock-subaction" style="width:100%;margin-top:10px" onclick="resetPractice()">처음부터 다시 체험</button>`;
+}
+function renderFontScreen(){
+ const s=simulation.stage;let body='';
+ if(s===0){body=`<div class="phone-settings"><div class="phone-status"><span>● 9:41</span><span>●●● 100%</span></div><div class="phone-screen"><div class="mock-title">⚙ 설정</div><p class="mock-desc">휴대폰 설정 화면을 직접 눌러보세요.</p><button class="phone-row" onclick="simulation.fontOpenedDisplay=true;simulation.stage=1;renderSimulation()"><span>▣ 디스플레이</span><span>›</span></button><button class="phone-row" onclick="showToast('이번 연습에서는 디스플레이 메뉴를 찾아보세요.')"><span>소리 및 진동</span><span>›</span></button><button class="phone-row" onclick="showToast('이번 연습에서는 디스플레이 메뉴를 찾아보세요.')"><span>배터리</span><span>›</span></button><button class="phone-row" onclick="showToast('이번 연습에서는 디스플레이 메뉴를 찾아보세요.')"><span>개인정보 보호</span><span>›</span></button></div></div><p class="mock-desc">목표: 설정에서 <b>디스플레이 → 글자 크기</b> 메뉴를 찾아 글씨를 <b>${simulation.goal?.fontSize||'크게'}</b>로 바꿔보세요.</p>`}
+ if(s===1){body=`<div class="phone-settings"><div class="phone-status"><span>‹ 설정</span><span>●●●</span></div><div class="phone-screen"><div class="mock-title">디스플레이</div><p class="mock-desc">화면과 글자 모양을 조절할 수 있어요.</p><button class="phone-row" onclick="simulation.fontOpenedSize=true;simulation.stage=2;renderSimulation()"><span>🔤 글자 크기</span><span>›</span></button><button class="phone-row" onclick="showToast('화면 밝기 메뉴예요. 글자 크기를 선택해 보세요.')"><span>☀ 화면 밝기</span><span>›</span></button><button class="phone-row" onclick="showToast('화면 자동 꺼짐 메뉴예요. 글자 크기를 선택해 보세요.')"><span>화면 자동 꺼짐</span><span>›</span></button></div></div><button class="mock-subaction" style="width:100%" onclick="simulation.stage=0;renderSimulation()">‹ 설정으로 돌아가기</button>`}
+ if(s===2){const size=simulation.fontSize;const px=size==='작게'?13:size==='크게'?23:17;body=`<div class="phone-settings"><div class="phone-status"><span>‹ 디스플레이</span><span>●●●</span></div><div class="phone-screen"><div class="mock-title">글자 크기</div><p class="mock-desc">아래에서 원하는 글자 크기를 선택해 보세요.</p><div class="phone-size-controls">${['작게','보통','크게'].map(x=>`<button class="${size===x?'selected':''}" onclick="simulation.fontSize='${x}';renderSimulation()">${x}</button>`).join('')}</div><div class="phone-sample" style="font-size:${px}px"><b>가나다라마바사</b><br>이 글씨가 화면에서 어떻게 보이나요?<br>읽기 편한 크기를 선택해 보세요.</div><div class="mock-row"><span>현재 글자 크기</span><b>${size}</b></div></div></div><button class="mock-action" onclick="simulation.stage=3;renderSimulation()">이 크기로 설정하고 평가하기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=1;renderSimulation()">‹ 이전 화면</button>`}
+ if(s===3){const checks=[['디스플레이 메뉴 열기',simulation.fontOpenedDisplay],['글자 크기 메뉴 열기',simulation.fontOpenedSize],[`글자 크기를 ${simulation.goal?.fontSize||'크게'}로 변경하기`,simulation.fontSize===(simulation.goal?.fontSize||'크게')]];const score=checks.filter(x=>x[1]).length;const ok=score===3;body=`<div class="mock-success"><div class="check">${ok?'🎉':'📝'}</div><div class="mock-title">글자 크기 설정 평가</div><p class="mock-desc">${score} / 3개 항목 성공</p></div><div class="mock-evaluation"><h3>내가 해본 설정</h3>${checks.map(x=>`<div class="eval-line"><span>${x[0]}</span><strong class="${x[1]?'eval-good':'eval-fix'}">${x[1]?'✓ 성공':'다시 확인'}</strong></div>`).join('')}<p class="eval-feedback"><b>${ok?'잘했어요!':'다시 연습해도 괜찮아요.'}</b><br>${ok?'설정 앱에서 디스플레이와 글자 크기 메뉴를 찾아 글씨를 키웠어요.':'설정 → 디스플레이 → 글자 크기 순서로 찾아가 보세요.'}<br><br><b>기억할 점:</b> 휴대폰 제조사에 따라 메뉴 이름이 조금 다를 수 있어요. 글자 크기를 바꾼 뒤 실제로 읽기 편한지 확인하세요.</p></div><button class="mock-action" onclick="completeSimulation()">평가 확인하고 마치기</button>${ok?`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 목표로 다시 연습</button>`:`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(false)">같은 목표로 처음부터 다시 해보기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 목표로 다시 연습</button>`}`}
+ return `<div class="mock-device"><div class="mock-top"><span>📱 스마트폰 설정</span><small>설정 연습용 화면</small></div><div class="mock-body">${body}</div></div><div class="mock-hint">가상 휴대폰 설정 화면입니다. 실제 휴대폰 설정은 변경되지 않아요.</div><button class="mock-subaction" style="width:100%;margin-top:10px" onclick="resetPractice()">처음부터 다시 체험</button>`;
+}
+function escapeHtml(value){return String(value??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
+function hospitalDateKey(year,month,day){return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`}
+function hospitalSoldOutDay(day){return [7,12,20,25].includes(day)}
+function hospitalGoalMarkup(){const g=simulation.goal||{};return `<div class="kiosk-goal"><strong>🎯 이번 예약 목표</strong><br><b>${g.date||'날짜 선택'} ${g.time||''}</b>에 <b>${g.name||'이름'}</b>으로 예약해 보세요.<br>전화번호는 연습용 <b>1234-1234</b>만 입력하고, 증상은 <b>${g.symptom||'예: 잦은 기침, 감기 증상'}</b>으로 작성해 주세요.</div>`}
+function renderHospitalCalendar(){
+ const m=simulation.hospitalMonth||new Date();const year=m.getFullYear(),month=m.getMonth();const first=new Date(year,month,1).getDay(),days=new Date(year,month+1,0).getDate();const today=new Date();today.setHours(0,0,0,0);
+ let cells=['일','월','화','수','목','금','토'].map(x=>`<div class="calendar-head">${x}</div>`).join('');
+ for(let i=0;i<first;i++)cells+='<div></div>';
+ for(let day=1;day<=days;day++){const date=new Date(year,month,day);const key=hospitalDateKey(year,month,day);const past=date<today;const sold=hospitalSoldOutDay(day);const disabled=past||sold;cells+=`<button class="calendar-day ${simulation.hospitalDate===key?'selected':''}" ${disabled?'disabled':''} onclick="simulation.hospitalDate='${key}';simulation.hospitalTime='';simulation.stage=1;renderSimulation()">${day}${sold?'<span class="sold-label">마감</span>':''}</button>`}
+ return `<div class="mock-title">예약 날짜 선택</div><p class="mock-desc">목표 날짜인 <b>${simulation.goal?.date||''}</b>를 달력에서 찾아 선택해 보세요. 회색 날짜는 예약이 마감되었어요.</p><div class="mock-row"><button class="mock-subaction" onclick="hospitalChangeMonth(-1)">‹ 이전 달</button><b>${year}년 ${month+1}월</b><button class="mock-subaction" onclick="hospitalChangeMonth(1)">다음 달 ›</button></div><div class="mock-calendar">${cells}</div><div class="mock-hint">날짜 중 일부는 예약 마감으로 표시되어 있어요. 예약 가능한 날짜를 선택해 주세요.</div>`;
+}
+function hospitalChangeMonth(delta){const m=simulation.hospitalMonth||new Date();simulation.hospitalMonth=new Date(m.getFullYear(),m.getMonth()+delta,1);simulation.hospitalDate='';simulation.hospitalTime='';renderSimulation()}
+function renderHospitalScreen(){
+ const s=simulation.stage;let body='';
+ if(s===0){body=`${hospitalGoalMarkup()}<div class="mock-title">병원 진료 예약</div><p class="mock-desc">목표에 맞춰 예약자 정보와 진료 내용을 입력한 뒤 날짜를 선택해 주세요.</p><label class="field">예약자 이름</label><input class="mock-field" value="${simulation.hospitalName}" placeholder="예: 김민수" oninput="simulation.hospitalName=this.value"><label class="field">전화번호 (연습용)</label><input class="mock-field" value="${simulation.hospitalPhone}" placeholder="1234-1234" maxlength="9" oninput="simulation.hospitalPhone=this.value"><div class="mock-hint">⚠️ 개인정보 보호를 위해 실제 전화번호를 입력하지 마세요. 반드시 연습용 번호 <b>1234-1234</b>를 사용해 주세요.</div><label class="field">진료 과목 / 불편한 증상</label><input class="mock-field" value="${simulation.hospitalSymptom}" placeholder="예: 잦은 기침, 감기 증상" oninput="simulation.hospitalSymptom=this.value"><p class="mock-desc">진료 과목은 목록에서 고르지 않고 직접 작성해요.</p>${renderHospitalCalendar()}`}
+ if(s===1){const date=simulation.hospitalDate;const slots=['09:00','09:30','10:00','10:30','11:00','11:30','13:30','14:00','14:30','15:00','15:30','16:00'];const sold=['09:30','11:00','14:00','15:30'];body=`${hospitalGoalMarkup()}<div class="mock-title">예약 시간 선택</div><p class="mock-desc">${date} · 예약 목표 시간은 <b>${simulation.goal?.time||''}</b>예요. 매진된 시간은 선택할 수 없어요.</p><div class="time-slot-grid">${slots.map(t=>{const isSold=sold.includes(t);return `<button class="time-slot ${simulation.hospitalTime===t?'selected':''}" ${isSold?'disabled':''} onclick="simulation.hospitalTime='${t}';renderSimulation()">${t}<small>${isSold?'매진':'예약 가능'}</small></button>`}).join('')}</div><button class="mock-action" ${simulation.hospitalTime?'':'disabled'} onclick="simulation.stage=2;renderSimulation()">선택한 시간으로 예약 확인</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=0;renderSimulation()">‹ 달력으로 돌아가기</button>`}
+ if(s===2){body=`${hospitalGoalMarkup()}<div class="mock-title">예약 내용을 확인해 주세요</div><div class="mock-train"><div class="mock-row"><span>예약자</span><b>${escapeHtml(simulation.hospitalName)}</b></div><div class="mock-row"><span>전화번호</span><b>${escapeHtml(simulation.hospitalPhone)}</b></div><div class="mock-row"><span>진료 내용</span><b>${escapeHtml(simulation.hospitalSymptom)}</b></div><div class="mock-row"><span>예약 날짜</span><b>${simulation.hospitalDate}</b></div><div class="mock-row"><span>예약 시간</span><b>${simulation.hospitalTime}</b></div><div class="mock-row"><span>예약 상태</span><b>가상 예약 확인</b></div></div><p class="mock-desc">실제 병원 예약은 진행되지 않아요. 입력한 내용을 확인해 보세요.</p><button class="mock-action" onclick="simulation.hospitalConfirmed=true;simulation.stage=3;renderSimulation()">예약 내용 확인 완료</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="simulation.stage=1;renderSimulation()">시간 다시 선택</button>`}
+ if(s===3){const g=simulation.goal||{};const checks=[['예약자 이름',simulation.hospitalName.trim()===g.name,`목표: ${g.name}`],['연습용 전화번호',simulation.hospitalPhone.trim()==='1234-1234','목표: 1234-1234'],['진료 내용 직접 작성',simulation.hospitalSymptom.trim().includes(g.symptom),`목표 예시: ${g.symptom}`],['예약 날짜',simulation.hospitalDate===g.date,`목표: ${g.date}`],['예약 시간',simulation.hospitalTime===g.time,`목표: ${g.time}`],['예약 내용 확인',simulation.hospitalConfirmed,'예약 내용을 확인했어요']];const score=checks.filter(x=>x[1]).length;const ok=score===checks.length;body=`${hospitalGoalMarkup()}<div class="mock-success"><div class="check">${ok?'🎉':'📝'}</div><div class="mock-title">병원 예약 연습 평가</div><p class="mock-desc">${score} / ${checks.length}개 항목 성공</p></div><div class="mock-evaluation"><h3>내 예약 확인하기</h3>${checks.map(x=>`<div class="eval-line"><span>${x[0]}<br><small>${x[2]}</small></span><strong class="${x[1]?'eval-good':'eval-fix'}">${x[1]?'✓ 성공':'다시 확인'}</strong></div>`).join('')}<p class="eval-feedback"><b>${ok?'잘했어요!':'한 번 더 연습해 봐요.'}</b><br>${ok?'목표에 맞는 정보를 입력하고 날짜와 시간을 선택했어요.':'목표에 표시된 이름, 연습용 전화번호, 증상, 날짜와 시간을 다시 확인해 보세요.'}<br><br><b>기억할 점:</b> 실제 예약 시에는 개인정보를 안전하게 입력하고, 병원과 예약 내용을 확인하세요.</p></div><button class="mock-action" onclick="completeSimulation()">평가 확인하고 마치기</button>${ok?`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 예약 목표로 다시 연습</button>`:`<button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(false)">같은 목표로 처음부터 다시 해보기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="retrySimulation(true)">새로운 예약 목표로 다시 연습</button>`}`}
+ return `<div class="mock-device"><div class="mock-top"><span>🏥 병원 예약</span><small>예약 연습용 화면</small></div><div class="mock-body">${body}</div></div><div class="mock-hint">병원 예약을 익히기 위한 가상 화면입니다. 날짜와 시간은 예시이며 실제 병원 예약은 발생하지 않습니다.</div><button class="mock-subaction" style="width:100%;margin-top:10px" onclick="resetPractice()">처음부터 다시 체험</button>`;
+}
+function trainSearch(){if(simulation.from===simulation.to){showToast('출발역과 도착역을 다르게 선택해 주세요.');return}if(!simulation.date){showToast('출발 날짜를 선택해 주세요.');return}simulation.stage=1;renderSimulation()}
+function trainChoose(index){simulation.train=TRAIN_OPTIONS[index];simulation.stage=2;renderSimulation()}
+function completeSimulation(){saved.completed=saved.completed||{};saved.completed[currentGuide]=true;persist();openGuide(currentGuide);showToast('평가를 확인했어요. 수고하셨습니다!')}
+function retrySimulation(newGoal=true){const kind=simulation.kind;const today=new Date();const goal=newGoal?createGoal(kind):simulation.goal;simulation={kind,stage:kind==='kiosk'?-1:0,cart:[],payment:'카드',from:'서울',to:'부산',date:'',train:null,passengers:1,takeout:'',itemChoice:null,selectedMenuIndex:null,drink:'',side:'',goal,fontOpenedDisplay:false,fontOpenedSize:false,fontSize:'보통',hospitalMonth:new Date(today.getFullYear(),today.getMonth(),1),hospitalDate:'',hospitalTime:'',hospitalDepartment:'',hospitalConfirmed:false,hospitalName:'',hospitalPhone:'',hospitalSymptom:''};if(kind==='hospital'&&simulation.goal){simulation.hospitalMonth=new Date(Number(simulation.goal.date.slice(0,4)),Number(simulation.goal.date.slice(5,7))-1,1)}lastPracticeSpeech='';renderSimulation();showToast(newGoal?'새로운 목표를 뽑았어요!':'같은 목표로 처음부터 다시 시작합니다.')}
+
+
+function renderGuideEvaluation(){
+ const g=guides[currentGuide];
+ document.getElementById('practiceTitle').textContent='연습 결과 확인';
+ document.getElementById('practiceSub').textContent='완료한 단계를 확인하고 다음에 기억할 점을 살펴보세요.';
+ document.getElementById('practiceCount').textContent='학습 평가';
+ document.getElementById('practiceProgress').style.width='100%';
+ const rows=g.steps.map((step,i)=>`<div class="eval-line"><span>${i+1}. ${step}</span><strong class="eval-good">✓ 확인했어요</strong></div>`).join('');
+ const advice=currentGuide==='스마트폰 글자 크게 하기'?'글자 크기를 바꾼 뒤 실제로 읽기 편한지 확인하는 것이 중요해요. 필요하면 설정으로 돌아가 크기를 다시 조절해도 됩니다.':'병원 이름과 진료 과목, 날짜와 시간을 차근차근 확인하는 습관이 중요해요. 예약을 마친 뒤에는 예약 완료 문구나 알림을 확인하세요.';
+ document.getElementById('practiceBody').innerHTML=`<div class="mock-success"><div class="check">✓</div><div class="mock-title">연습을 모두 마쳤어요!</div><p class="mock-desc">아래 단계들을 순서대로 확인했어요.</p></div><div class="mock-evaluation"><h3>📝 나의 연습 평가</h3>${rows}<p class="eval-feedback"><b>좋았어요!</b> 모든 단계를 확인했어요.<br><b>다음에 기억할 점:</b> ${advice}</p></div><button class="mock-action" onclick="finishGuidePractice()">평가 확인하고 마치기</button><button class="mock-subaction" style="width:100%;margin-top:8px" onclick="resetPractice()">다시 연습하기</button>`;
+ document.getElementById('practiceCheck').checked=true;
+ document.querySelector('#practice .practice-voice').style.display='none';
+ document.getElementById('practiceVoiceState').style.display='none';
+ document.getElementById('practiceVoiceStatus').style.display='none';
+ document.querySelector('#practice .editor-actions').style.display='none';
+ document.querySelector('#practice > button.secondary[onclick="resetPractice()"]')?.style.setProperty('display','none');
+}
+function finishGuidePractice(){saved.completed=saved.completed||{};saved.completed[currentGuide]=true;persist();openGuide(currentGuide);showToast('평가를 확인했어요. 수고하셨습니다!')}
+function updatePracticeButtons(){
+ const check=document.getElementById('practiceCheck').checked;practiceChecks[practiceIndex]=check;
+ const b=document.getElementById('nextStep');b.disabled=!check;
+ const last=practiceIndex===guides[currentGuide].steps.length-1;b.textContent=last?'연습 완료하기':'다음 단계';
+ const n=practiceIndex+(check?1:0),total=guides[currentGuide].steps.length;
+ document.getElementById('practiceProgress').style.width=(n/total*100)+'%';
+}
+function changePractice(delta){
+ if(delta>0 && !practiceChecks[practiceIndex]){showToast('이 단계를 이해했다면 체크해 주세요.');return}
+ if(delta>0 && practiceIndex===guides[currentGuide].steps.length-1){
+  practiceReview=true;renderPractice();return;
+ }
+ practiceIndex=Math.max(0,Math.min(guides[currentGuide].steps.length-1,practiceIndex+delta));renderPractice();
+}
+function resetPractice(){if(simulation.kind){retrySimulation(true);return}practiceIndex=0;practiceReview=false;practiceChecks=guides[currentGuide].steps.map(()=>false);document.querySelector('#practice .practice-voice').style.display='flex';document.getElementById('practiceVoiceState').style.display='block';document.getElementById('practiceVoiceStatus').style.display='block';document.querySelector('#practice .editor-actions').style.display='flex';document.querySelector('#practice > button.secondary[onclick="resetPractice()"]')?.style.setProperty('display','block');renderPractice();showToast('처음 단계부터 다시 시작합니다.')}
+/* ===== 8. 도움말 편집 · 내보내기 · 가져오기 ===== */
+function openEditor(selected='__new__'){
+ renderEditorOptions(selected);go('editor');
+}
+function renderEditorOptions(selected){
+ const select=document.getElementById('editSelect');select.replaceChildren();
+ const option=document.createElement('option');option.value='__new__';option.textContent='＋ 새로운 도움말 만들기';select.append(option);
+ for(const key of Object.keys(guides)){const o=document.createElement('option');o.value=key;o.textContent=key;select.append(o)}
+ select.value=guides[selected]?selected:'__new__';loadEditorSelection();
+}
+function loadEditorSelection(){
+ const selected=document.getElementById('editSelect').value;editingOriginal=selected==='__new__'?'':selected;
+ const guide=guides[editingOriginal];
+ document.getElementById('editName').value=editingOriginal;
+ document.getElementById('editEmoji').value=guide?.emoji||'📗';
+ document.getElementById('editDesc').value=guide?.desc||'';
+ document.getElementById('editSteps').value=guide?.steps.join('\n')||'';
+}
+function saveGuide(){
+ const name=document.getElementById('editName').value.trim();const emoji=document.getElementById('editEmoji').value.trim()||'📗';const desc=document.getElementById('editDesc').value.trim();
+ const steps=document.getElementById('editSteps').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ if(!name||name.length>80){showToast('제목은 1~80자로 적어주세요.');return}
+ if(!steps.length||steps.length>30||steps.some(x=>x.length>500)){showToast('단계는 1~30개, 각 단계 500자 이하로 작성해 주세요.');return}
+ if(!editingOriginal && Object.hasOwn(guides,name)){showToast('같은 이름의 도움말이 있습니다.');return}
+ if(editingOriginal!==name && Object.hasOwn(guides,name)){showToast('같은 이름의 도움말이 있습니다.');return}
+ if(editingOriginal && Object.hasOwn(DEFAULT_GUIDES,editingOriginal) && editingOriginal!==name){showToast('기본 도움말 제목은 변경할 수 없습니다.');return}
+ if(!editingOriginal && Object.keys(guides).length>=100){showToast('도움말은 최대 100개까지 저장할 수 있습니다.');return}
+ if(editingOriginal && editingOriginal!==name)delete guides[editingOriginal];
+ guides[name]={emoji:emoji.slice(0,12),desc:desc.slice(0,120),steps};persist();renderCustomGuides();renderEditorOptions(name);showToast('도움말을 저장했습니다.');
+}
+function removeGuide(){
+ if(!editingOriginal){showToast('삭제할 도움말을 먼저 선택해 주세요.');return}
+ if(Object.hasOwn(DEFAULT_GUIDES,editingOriginal)){
+    if(!confirm('이 도움말의 수정 내용을 취소하고 기본 안내로 복원할까요?'))return;
+    guides[editingOriginal]=structuredCloneSafe(DEFAULT_GUIDES[editingOriginal]);
+ }else{
+    if(!confirm('이 도움말을 삭제할까요?'))return;
+    delete guides[editingOriginal];
+ }
+ persist();renderCustomGuides();renderEditorOptions('__new__');showToast('변경했습니다.');
+}
+function exportGuides(){
+ const payload={format:'digital-mate-guides',version:1,exportedAt:new Date().toISOString(),guides};
+ const file=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download='디지털_동행_도움말_백업.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function importGuides(event){
+ const file=event.target.files[0];event.target.value='';if(!file)return;
+ if(file.size>500000){showToast('백업 파일이 너무 큽니다.');return}
+ try{const data=JSON.parse(await file.text());
+  if(data.format!=='digital-mate-guides'||!data.guides||typeof data.guides!=='object')throw new Error('지원하지 않는 파일 형식');
+  const next=normalizeGuides(data.guides);
+  if(!confirm('현재 도움말을 백업 파일 내용으로 교체할까요?'))return;
+  guides=next;persist();renderCustomGuides();renderEditorOptions('__new__');showToast('도움말을 가져왔습니다.');
+ }catch(e){showToast('올바른 도움말 백업 JSON 파일이 아닙니다.');console.warn(e)}
+}
+/* ===== 9. 접근성 설정 ===== */
+function syncVoiceControls(){
+ const enabled=!!settings.voiceEnabled;
+ const master=document.getElementById('voiceMasterButton');
+ if(master){master.textContent=enabled?'🔊':'🔇';master.title=enabled?'음성 안내 끄기':'음성 안내 켜기';master.setAttribute('aria-label',enabled?'음성 안내 끄기':'음성 안내 켜기');master.setAttribute('aria-pressed',enabled?'true':'false');}
+ ['guideVoiceState','practiceVoiceState'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=enabled?'🔊 음성 안내 사용 중':'🔇 음성 안내 꺼짐 — 설정 또는 상단 버튼에서 켤 수 있어요.';el.classList.toggle('voice-off-note',!enabled);}});
+ document.querySelectorAll('.voice-play-control,.step-voice').forEach(btn=>{btn.disabled=!enabled;btn.title=enabled?'음성으로 안내 듣기':'음성 안내 기능을 먼저 켜주세요.';});
+}
+function toggleVoiceEnabled(){
+ settings.voiceEnabled=!settings.voiceEnabled;
+ if(!settings.voiceEnabled && 'speechSynthesis' in window){window.speechSynthesis.cancel();setVoiceStatus('음성 안내 기능을 껐어요.');}
+ applySettings();persist();
+ if(settings.voiceEnabled){lastPracticeSpeech='';scheduleCurrentScreenSpeech();}
+ showToast(settings.voiceEnabled?'음성 안내 기능을 켰습니다.':'음성 안내 기능을 껐습니다.');
+}
+function syncToggle(id,on){const b=document.getElementById(id);b.classList.toggle('on',!!on);b.setAttribute('aria-pressed',on?'true':'false')}
+function applySettings(){
+ document.body.classList.toggle('large-mode',settings.large);
+ document.body.classList.toggle('contrast-mode',settings.contrast);
+ document.body.style.setProperty('--ui-zoom',String(Number(settings.fontScale)||1.08));
+ const scaleControl=document.getElementById('fontScaleControl');if(scaleControl)scaleControl.value=String(Number(settings.fontScale)||1.08);
+ const scaleValue=document.getElementById('fontScaleValue');if(scaleValue)scaleValue.textContent=Math.round((Number(settings.fontScale)||1.08)*100)+'%';
+ syncToggle('largeToggle',settings.large);syncToggle('contrastToggle',settings.contrast);
+ syncToggle('easyToggle',settings.easy);syncToggle('voiceEnabledToggle',settings.voiceEnabled);syncToggle('autoVoiceToggle',settings.autoVoice);syncVoiceControls();
+}
+function setFontScale(value){settings.fontScale=Math.max(1,Math.min(1.4,Number(value)||1.08));applySettings();persist()}
+function toggleLarge(){settings.large=!settings.large;applySettings();persist()}
+function toggleContrast(){settings.contrast=!settings.contrast;applySettings();persist()}
+function toggleEasy(){settings.easy=!settings.easy;applySettings();persist()}
+function toggleAutoVoice(){settings.autoVoice=!settings.autoVoice;applySettings();persist()}
+function resetHistory(){if(!confirm('학습 기록과 질문 대화를 초기화할까요?'))return;
+ history=[...NEW_CHAT];saved.completed={};restoreChat();persist();showToast('기록을 초기화했습니다.')}
+/* ===== 10. 처음 실행 시 초기화 ===== */
+function init(){
+ restoreChat();renderCustomGuides();applySettings();enableScreenSpeechObserver();
+ document.getElementById('question').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();sendQuestion()}});
+ // 음성 안내는 사용자가 직접 켠 경우에만 자동 재생합니다.
+ if (settings.voiceEnabled) scheduleCurrentScreenSpeech();
+}
+init();
+</script>
+</body></html>
