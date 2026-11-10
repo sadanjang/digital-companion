@@ -296,7 +296,7 @@ textarea{min-height:82px;resize:vertical}
 <script>
 'use strict';
 /* ===== AI 서버 주소: Cloudflare 배포 후 workers.dev 주소만 입력하세요 ===== */
-const AI_WORKER_URL = 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev';
+const AI_WORKER_URL = 'https://digital-companion-ai.marchelino02.workers.dev';
 function aiConfigured(){return /^https:\/\/[^\s]+\.workers\.dev\/?$/.test(AI_WORKER_URL) && !AI_WORKER_URL.includes('YOUR-');}
 async function askAI(payload){
   if(!aiConfigured())throw new Error('AI 서버 주소가 아직 설정되지 않았습니다.');
